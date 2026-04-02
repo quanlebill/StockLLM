@@ -1,0 +1,356 @@
+models:
+  # ── mart__inflation ─────────────────────────────────────────────────────────
+  - name: mart__inflation
+    semantic_model:
+      enabled: true
+      name: inflation_table
+
+    columns:
+      - name: inflation_pii
+        entity:
+          name: inflation_pii
+          type: primary
+
+      - name: observation_date
+        granularity: month
+        dimension:
+          type: time
+        config:
+          meta:
+            unit: month
+
+    metrics:
+      - name: average_cpi_level
+        type: simple
+        agg: average
+        expr: cpi_level
+        join_to_timespine: true
+        agg_time_dimension: observation_date
+        config:
+          meta:
+            unit: "Index 1982-1984=100"
+
+      - name: average_core_cpi_level
+        type: simple
+        agg: average
+        expr: core_cpi_level
+        join_to_timespine: true
+        agg_time_dimension: observation_date
+        config:
+          meta:
+            unit: "Index 1982-1984=100"
+
+      - name: average_pce_level
+        type: simple
+        agg: average
+        expr: pce_level
+        join_to_timespine: true
+        agg_time_dimension: observation_date
+        config:
+          meta:
+            unit: "Index 2017=100"
+
+      - name: average_core_pce_level
+        type: simple
+        agg: average
+        expr: core_pce_level
+        join_to_timespine: true
+        agg_time_dimension: observation_date
+        config:
+          meta:
+            unit: "Index 2017=100"
+
+      - name: average_trimmed_mean_pce_yoy
+        type: simple
+        agg: average
+        expr: trimmed_mean_pce_yoy
+        join_to_timespine: true
+        agg_time_dimension: observation_date
+        config:
+          meta:
+            unit: "%"
+
+      - name: average_median_cpi_yoy
+        type: simple
+        agg: average
+        expr: median_cpi_yoy
+        join_to_timespine: true
+        agg_time_dimension: observation_date
+        config:
+          meta:
+            unit: "%"
+
+      - name: average_ppi_level
+        type: simple
+        agg: average
+        expr: ppi_level
+        join_to_timespine: true
+        agg_time_dimension: observation_date
+        config:
+          meta:
+            unit: "Index 1982=100"
+
+  # ── mart__fed_funds_monthly ──────────────────────────────────────────────────
+  - name: mart__fed_funds_monthly
+    semantic_model:
+      enabled: true
+      name: fed_funds_monthly_table
+
+    columns:
+      - name: fed_funds_monthly_pii
+        entity:
+          name: fed_funds_monthly_pii
+          type: primary
+
+      - name: observation_date
+        granularity: month
+        dimension:
+          type: time
+        config:
+          meta:
+            unit: month
+
+    metrics:
+      - name: average_fed_funds_rate_monthly
+        type: simple
+        agg: average
+        expr: fed_funds_rate
+        join_to_timespine: true
+        agg_time_dimension: observation_date
+        config:
+          meta:
+            unit: "%"
+
+  # ── mart__fed_funds_daily ────────────────────────────────────────────────────
+  - name: mart__fed_funds_daily
+    semantic_model:
+      enabled: true
+      name: fed_funds_daily_table
+
+    columns:
+      - name: fed_funds_daily_pii
+        entity:
+          name: fed_funds_daily_pii
+          type: primary
+
+      - name: observation_date
+        granularity: day
+        dimension:
+          type: time
+        config:
+          meta:
+            unit: day
+
+    metrics:
+      - name: average_fed_funds_rate_daily
+        type: simple
+        agg: average
+        expr: fed_funds_rate
+        join_to_timespine: true
+        agg_time_dimension: observation_date
+        config:
+          meta:
+            unit: "%"
+
+      - name: average_target_lower
+        type: simple
+        agg: average
+        expr: target_lower
+        join_to_timespine: true
+        agg_time_dimension: observation_date
+        config:
+          meta:
+            unit: "%"
+
+      - name: average_target_upper
+        type: simple
+        agg: average
+        expr: target_upper
+        join_to_timespine: true
+        agg_time_dimension: observation_date
+        config:
+          meta:
+            unit: "%"
+
+  # ── mart__nonfarm_payrolls ───────────────────────────────────────────────────
+  - name: mart__nonfarm_payrolls
+    semantic_model:
+      enabled: true
+      name: nonfarm_payrolls_table
+
+    columns:
+      - name: nonfarm_pii
+        entity:
+          name: nonfarm_pii
+          type: primary
+
+      - name: observation_date
+        granularity: month
+        dimension:
+          type: time
+        config:
+          meta:
+            unit: month
+
+    metrics:
+      - name: average_payrolls_level
+        type: simple
+        agg: average
+        expr: payrolls_level
+        join_to_timespine: true
+        agg_time_dimension: observation_date
+        config:
+          meta:
+            unit: "Thousands of Persons"
+
+  # ── mart__consumer_sentiment ─────────────────────────────────────────────────
+  - name: mart__consumer_sentiment
+    semantic_model:
+      enabled: true
+      name: consumer_sentiment_table
+
+    columns:
+      - name: sentiment_pii
+        entity:
+          name: sentiment_pii
+          type: primary
+
+      - name: observation_date
+        granularity: month
+        dimension:
+          type: time
+        config:
+          meta:
+            unit: month
+
+    metrics:
+      - name: average_consumer_sentiment
+        type: simple
+        agg: average
+        expr: consumer_sentiment
+        join_to_timespine: true
+        agg_time_dimension: observation_date
+        config:
+          meta:
+            unit: "Index 1966:Q1=100"
+
+  # ── mart__yield_curve ────────────────────────────────────────────────────────
+  - name: mart__yield_curve
+    semantic_model:
+      enabled: true
+      name: yield_curve_table
+
+    columns:
+      - name: yield_curve_pii
+        entity:
+          name: yield_curve_pii
+          type: primary
+
+      - name: observation_date
+        granularity: day
+        dimension:
+          type: time
+        config:
+          meta:
+            unit: day
+
+    metrics:
+      - name: average_yield_1mo
+        type: simple
+        agg: average
+        expr: yield_1mo
+        join_to_timespine: true
+        agg_time_dimension: observation_date
+        config:
+          meta:
+            unit: "%"
+
+      - name: average_yield_3mo
+        type: simple
+        agg: average
+        expr: yield_3mo
+        join_to_timespine: true
+        agg_time_dimension: observation_date
+        config:
+          meta:
+            unit: "%"
+
+      - name: average_yield_6mo
+        type: simple
+        agg: average
+        expr: yield_6mo
+        join_to_timespine: true
+        agg_time_dimension: observation_date
+        config:
+          meta:
+            unit: "%"
+
+      - name: average_yield_1y
+        type: simple
+        agg: average
+        expr: yield_1y
+        join_to_timespine: true
+        agg_time_dimension: observation_date
+        config:
+          meta:
+            unit: "%"
+
+      - name: average_yield_2y
+        type: simple
+        agg: average
+        expr: yield_2y
+        join_to_timespine: true
+        agg_time_dimension: observation_date
+        config:
+          meta:
+            unit: "%"
+
+      - name: average_yield_5y
+        type: simple
+        agg: average
+        expr: yield_5y
+        join_to_timespine: true
+        agg_time_dimension: observation_date
+        config:
+          meta:
+            unit: "%"
+
+      - name: average_yield_10y
+        type: simple
+        agg: average
+        expr: yield_10y
+        join_to_timespine: true
+        agg_time_dimension: observation_date
+        config:
+          meta:
+            unit: "%"
+
+      - name: average_yield_30y
+        type: simple
+        agg: average
+        expr: yield_30y
+        join_to_timespine: true
+        agg_time_dimension: observation_date
+        config:
+          meta:
+            unit: "%"
+
+      - name: average_spread_10y_2y
+        type: simple
+        agg: average
+        expr: spread_10y_2y
+        join_to_timespine: true
+        agg_time_dimension: observation_date
+        config:
+          meta:
+            unit: "%"
+
+      - name: average_spread_10y_3m
+        type: simple
+        agg: average
+        expr: spread_10y_3m
+        join_to_timespine: true
+        agg_time_dimension: observation_date
+        config:
+          meta:
+            unit: "%"

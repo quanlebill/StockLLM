@@ -1,0 +1,1732 @@
+{
+    "MART__STANDARD_DAY": {
+        "name": "MART__STANDARD_DAY",
+        "schema": {
+            "ORDER_DAY": "DATE"
+        },
+        "preview": [
+            [
+                "1962-01-01"
+            ],
+            [
+                "1962-01-02"
+            ],
+            [
+                "1962-01-03"
+            ],
+            [
+                "1962-01-04"
+            ],
+            [
+                "1962-01-05"
+            ],
+            [
+                "1962-01-06"
+            ],
+            [
+                "1962-01-07"
+            ],
+            [
+                "1962-01-08"
+            ],
+            [
+                "1962-01-09"
+            ],
+            [
+                "1962-01-10"
+            ]
+        ]
+    },
+    "MART__FOMC_PROBABILITIES": {
+        "name": "MART__FOMC_PROBABILITIES",
+        "schema": {
+            "TARGET_RATE_LOWER_PCT": "FLOAT",
+            "TARGET_RATE_UPPER_PCT": "FLOAT",
+            "PROBABILITY_PCT": "FLOAT",
+            "MEETING_DATE": "TIMESTAMP_NTZ",
+            "FOMC_PII": "TEXT",
+            "OBSERVATION_DATE": "TIMESTAMP_NTZ"
+        },
+        "preview": [
+            [
+                "2026-05-06-3.5-3.75",
+                "2026-04-01T00:00:00",
+                "2026-05-06T00:00:00",
+                3.5,
+                3.75,
+                100.0
+            ],
+            [
+                "2026-06-17-3.5-3.75",
+                "2026-04-01T00:00:00",
+                "2026-06-17T00:00:00",
+                3.5,
+                3.75,
+                100.0
+            ],
+            [
+                "2026-07-29-3.5-3.75",
+                "2026-04-01T00:00:00",
+                "2026-07-29T00:00:00",
+                3.5,
+                3.75,
+                100.0
+            ],
+            [
+                "2026-09-16-3.5-3.75",
+                "2026-04-01T00:00:00",
+                "2026-09-16T00:00:00",
+                3.5,
+                3.75,
+                100.0
+            ],
+            [
+                "2026-11-04-3.5-3.75",
+                "2026-04-01T00:00:00",
+                "2026-11-04T00:00:00",
+                3.5,
+                3.75,
+                100.0
+            ],
+            [
+                "2026-12-16-3.5-3.75",
+                "2026-04-01T00:00:00",
+                "2026-12-16T00:00:00",
+                3.5,
+                3.75,
+                100.0
+            ]
+        ]
+    },
+    "MART__COUNTRIES": {
+        "name": "MART__COUNTRIES",
+        "schema": {
+            "COUNTRY_NAME": "TEXT",
+            "ISO_ALPHA_3_CODE": "TEXT",
+            "ISO_ALPHA_2_CODE": "TEXT"
+        },
+        "preview": [
+            [
+                "united states",
+                "us",
+                "usa"
+            ],
+            [
+                "canada",
+                "ca",
+                "can"
+            ]
+        ]
+    },
+    "MART__GDP": {
+        "name": "MART__GDP",
+        "schema": {
+            "COUNTRY_NAME": "TEXT",
+            "GDP_PPP_PER_CAPITA": "NUMBER",
+            "ORDER_YEAR": "TIMESTAMP_NTZ",
+            "GDP_NOMINAL": "NUMBER",
+            "TYPE": "TEXT",
+            "GDP_PII": "TEXT",
+            "GDP_REAL": "NUMBER",
+            "GDP_PPP": "NUMBER",
+            "GDP_NOMINAL_PER_CAPITA": "NUMBER",
+            "GDP_GROWTH": "NUMBER"
+        },
+        "preview": [
+            [
+                "us-history-1985",
+                "united states",
+                "history",
+                "1985-01-01T00:00:00",
+                4339000000000.0,
+                18199.0,
+                4339000000000.0,
+                18199.0,
+                8307861210352.0,
+                0.98
+            ],
+            [
+                "canada-history-1995",
+                "canada",
+                "history",
+                "1995-01-01T00:00:00",
+                605941000000.0,
+                20707.0,
+                696709000000.0,
+                23809.0,
+                955122057479.0,
+                1.07
+            ],
+            [
+                "us-history-2003",
+                "united states",
+                "history",
+                "2003-01-01T00:00:00",
+                11456450000000.0,
+                39405.0,
+                11456450000000.0,
+                39405.0,
+                14477988212153.0,
+                0.98
+            ],
+            [
+                "us-history-2013",
+                "united states",
+                "history",
+                "2013-01-01T00:00:00",
+                16880675000000.0,
+                53364.0,
+                16880675000000.0,
+                53364.0,
+                17334068402874.0,
+                0.94
+            ],
+            [
+                "canada-history-1985",
+                "canada",
+                "history",
+                "1985-01-01T00:00:00",
+                366184000000.0,
+                14186.0,
+                427262000000.0,
+                16552.0,
+                771429628794.0,
+                1.0
+            ],
+            [
+                "us-history-1989",
+                "united states",
+                "history",
+                "1989-01-01T00:00:00",
+                5641600000000.0,
+                22814.0,
+                5641600000000.0,
+                22814.0,
+                9604107858980.0,
+                0.92
+            ],
+            [
+                "us-history-1997",
+                "united states",
+                "history",
+                "1997-01-01T00:00:00",
+                8577550000000.0,
+                31440.0,
+                8577550000000.0,
+                31440.0,
+                12038266260922.0,
+                0.96
+            ],
+            [
+                "canada-history-2012",
+                "canada",
+                "history",
+                "2012-01-01T00:00:00",
+                1828362000000.0,
+                52745.0,
+                1491786000000.0,
+                43035.0,
+                1469093201732.0,
+                1.06
+            ],
+            [
+                "canada-history-2013",
+                "canada",
+                "history",
+                "2013-01-01T00:00:00",
+                1846595000000.0,
+                52711.0,
+                1552463000000.0,
+                44315.0,
+                1503261570452.0,
+                1.06
+            ],
+            [
+                "us-history-2015",
+                "united states",
+                "history",
+                "2015-01-01T00:00:00",
+                18295000000000.0,
+                57007.0,
+                18295000000000.0,
+                57007.0,
+                18295019000000.0,
+                0.93
+            ]
+        ]
+    },
+    "MART__MARKET_BREADTH": {
+        "name": "MART__MARKET_BREADTH",
+        "schema": {
+            "DECLINES": "FLOAT",
+            "BREADTH_PII": "TEXT",
+            "ADVANCE_DECLINE_RATIO": "FLOAT",
+            "NEW_52W_HIGHS": "FLOAT",
+            "ADVANCES": "FLOAT",
+            "UNCHANGED": "FLOAT",
+            "PCT_ABOVE_50DMA": "FLOAT",
+            "PCT_ABOVE_200DMA": "FLOAT",
+            "INDEX_NAME": "TEXT",
+            "OBSERVATION_DATE": "TIMESTAMP_NTZ",
+            "NEW_52W_LOWS": "FLOAT"
+        },
+        "preview": [
+            [
+                "NYSE-2026-04-01",
+                "NYSE",
+                "2026-04-01T00:00:00",
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                0.0,
+                55.0
+            ]
+        ]
+    },
+    "MART__CONSUMER_SENTIMENT": {
+        "name": "MART__CONSUMER_SENTIMENT",
+        "schema": {
+            "CONSUMER_SENTIMENT": "FLOAT",
+            "OBSERVATION_DATE": "TIMESTAMP_NTZ",
+            "COUNTRY_NAME": "TEXT",
+            "SENTIMENT_PII": "TEXT"
+        },
+        "preview": [
+            [
+                "2026-01-01",
+                "united states",
+                "2026-01-01T00:00:00",
+                56.4
+            ],
+            [
+                "2025-12-01",
+                "united states",
+                "2025-12-01T00:00:00",
+                52.9
+            ],
+            [
+                "2025-11-01",
+                "united states",
+                "2025-11-01T00:00:00",
+                51.0
+            ],
+            [
+                "2025-10-01",
+                "united states",
+                "2025-10-01T00:00:00",
+                53.6
+            ],
+            [
+                "2025-09-01",
+                "united states",
+                "2025-09-01T00:00:00",
+                55.1
+            ],
+            [
+                "2025-08-01",
+                "united states",
+                "2025-08-01T00:00:00",
+                58.2
+            ],
+            [
+                "2025-07-01",
+                "united states",
+                "2025-07-01T00:00:00",
+                61.7
+            ],
+            [
+                "2025-06-01",
+                "united states",
+                "2025-06-01T00:00:00",
+                60.7
+            ],
+            [
+                "2025-05-01",
+                "united states",
+                "2025-05-01T00:00:00",
+                52.2
+            ],
+            [
+                "2025-04-01",
+                "united states",
+                "2025-04-01T00:00:00",
+                52.2
+            ]
+        ]
+    },
+    "MART__INFLATION": {
+        "name": "MART__INFLATION",
+        "schema": {
+            "TRIMMED_MEAN_PCE_YOY": "FLOAT",
+            "CORE_PCE_LEVEL": "FLOAT",
+            "MEDIAN_CPI_YOY": "FLOAT",
+            "PCE_LEVEL": "FLOAT",
+            "CORE_CPI_LEVEL": "FLOAT",
+            "COUNTRY_NAME": "TEXT",
+            "PPI_LEVEL": "FLOAT",
+            "OBSERVATION_DATE": "TIMESTAMP_NTZ",
+            "INFLATION_PII": "TEXT",
+            "CPI_LEVEL": "FLOAT"
+        },
+        "preview": [
+            [
+                "2026-02-01",
+                "united states",
+                "2026-02-01T00:00:00",
+                327.46,
+                333.512,
+                null,
+                null,
+                null,
+                2.84573063758968,
+                267.848
+            ],
+            [
+                "2026-01-01",
+                "united states",
+                "2026-01-01T00:00:00",
+                326.588,
+                332.793,
+                128.969,
+                128.394,
+                2.43,
+                2.96602523729412,
+                262.39
+            ],
+            [
+                "2025-12-01",
+                "united states",
+                "2025-12-01T00:00:00",
+                326.031,
+                331.814,
+                128.615,
+                127.929,
+                2.45,
+                3.09766902742734,
+                261.02
+            ],
+            [
+                "2025-11-01",
+                "united states",
+                "2025-11-01T00:00:00",
+                325.063,
+                331.043,
+                128.155,
+                127.473,
+                2.51,
+                3.10116860086702,
+                261.579
+            ],
+            [
+                "2025-10-01",
+                "united states",
+                "2025-10-01T00:00:00",
+                null,
+                null,
+                null,
+                null,
+                2.55,
+                null,
+                null
+            ],
+            [
+                "2025-10-01",
+                "united states",
+                "2025-10-01T00:00:00",
+                null,
+                null,
+                null,
+                127.245,
+                null,
+                null,
+                null
+            ],
+            [
+                "2025-10-01",
+                "united states",
+                "2025-10-01T00:00:00",
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                260.591
+            ],
+            [
+                "2025-10-01",
+                "united states",
+                "2025-10-01T00:00:00",
+                null,
+                null,
+                null,
+                null,
+                null,
+                3.27614491336918,
+                null
+            ],
+            [
+                "2025-10-01",
+                "united states",
+                "2025-10-01T00:00:00",
+                null,
+                null,
+                127.873,
+                null,
+                null,
+                null,
+                null
+            ],
+            [
+                "2025-09-01",
+                "united states",
+                "2025-09-01T00:00:00",
+                324.245,
+                330.418,
+                127.625,
+                126.954,
+                2.7,
+                3.49132286875435,
+                262.054
+            ]
+        ]
+    },
+    "MART__NONFARM_PAYROLLS": {
+        "name": "MART__NONFARM_PAYROLLS",
+        "schema": {
+            "PAYROLLS_LEVEL": "FLOAT",
+            "NONFARM_PII": "TEXT",
+            "COUNTRY_NAME": "TEXT",
+            "OBSERVATION_DATE": "TIMESTAMP_NTZ"
+        },
+        "preview": [
+            [
+                "2026-02-01",
+                "united states",
+                "2026-02-01T00:00:00",
+                158466.0
+            ],
+            [
+                "2026-01-01",
+                "united states",
+                "2026-01-01T00:00:00",
+                158558.0
+            ],
+            [
+                "2025-12-01",
+                "united states",
+                "2025-12-01T00:00:00",
+                158432.0
+            ],
+            [
+                "2025-11-01",
+                "united states",
+                "2025-11-01T00:00:00",
+                158449.0
+            ],
+            [
+                "2025-10-01",
+                "united states",
+                "2025-10-01T00:00:00",
+                158408.0
+            ],
+            [
+                "2025-09-01",
+                "united states",
+                "2025-09-01T00:00:00",
+                158548.0
+            ],
+            [
+                "2025-08-01",
+                "united states",
+                "2025-08-01T00:00:00",
+                158472.0
+            ],
+            [
+                "2025-07-01",
+                "united states",
+                "2025-07-01T00:00:00",
+                158542.0
+            ],
+            [
+                "2025-06-01",
+                "united states",
+                "2025-06-01T00:00:00",
+                158478.0
+            ],
+            [
+                "2025-05-01",
+                "united states",
+                "2025-05-01T00:00:00",
+                158498.0
+            ]
+        ]
+    },
+    "MART__EARNINGS_CALENDAR": {
+        "name": "MART__EARNINGS_CALENDAR",
+        "schema": {
+            "ACTUAL_EPS": "FLOAT",
+            "TICKER": "TEXT",
+            "FISCAL_QUARTER_END": "TEXT",
+            "EPS_SURPRISE_PCT": "FLOAT",
+            "COMPANY": "TEXT",
+            "ACTUAL_REVENUE_USD": "FLOAT",
+            "OBSERVATION_DATE": "TIMESTAMP_NTZ",
+            "REPORT_TIME": "TEXT",
+            "REPORT_DATE": "TIMESTAMP_NTZ",
+            "EST_EPS": "FLOAT",
+            "EARNINGS_PII": "TEXT",
+            "EST_REVENUE_USD": "FLOAT"
+        },
+        "preview": []
+    },
+    "MART__STANDARD_YEAR": {
+        "name": "MART__STANDARD_YEAR",
+        "schema": {
+            "ORDER_YEAR": "TIMESTAMP_LTZ"
+        },
+        "preview": [
+            [
+                "1976-01-01T00:00:00-08:00"
+            ],
+            [
+                "1977-01-01T00:00:00-08:00"
+            ],
+            [
+                "1978-01-01T00:00:00-08:00"
+            ],
+            [
+                "1979-01-01T00:00:00-08:00"
+            ],
+            [
+                "1980-01-01T00:00:00-08:00"
+            ],
+            [
+                "1981-01-01T00:00:00-08:00"
+            ],
+            [
+                "1982-01-01T00:00:00-08:00"
+            ],
+            [
+                "1983-01-01T00:00:00-08:00"
+            ],
+            [
+                "1984-01-01T00:00:00-08:00"
+            ],
+            [
+                "1985-01-01T00:00:00-08:00"
+            ]
+        ]
+    },
+    "MART__YIELD_CURVE": {
+        "name": "MART__YIELD_CURVE",
+        "schema": {
+            "YIELD_30Y": "FLOAT",
+            "YIELD_1Y": "FLOAT",
+            "YIELD_5Y": "FLOAT",
+            "YIELD_2Y": "FLOAT",
+            "YIELD_3MO": "FLOAT",
+            "YIELD_CURVE_PII": "TEXT",
+            "SPREAD_10Y_2Y": "FLOAT",
+            "YIELD_6MO": "FLOAT",
+            "YIELD_1MO": "FLOAT",
+            "YIELD_10Y": "FLOAT",
+            "OBSERVATION_DATE": "TIMESTAMP_NTZ",
+            "COUNTRY_NAME": "TEXT",
+            "SPREAD_10Y_3M": "FLOAT"
+        },
+        "preview": [
+            [
+                "2026-03-24",
+                "united states",
+                "2026-03-24T00:00:00",
+                3.74,
+                3.74,
+                3.78,
+                3.81,
+                3.9,
+                4.03,
+                4.39,
+                4.94,
+                0.49,
+                0.65
+            ],
+            [
+                "2026-03-23",
+                "united states",
+                "2026-03-23T00:00:00",
+                3.73,
+                3.74,
+                3.77,
+                3.76,
+                3.83,
+                3.95,
+                4.34,
+                4.91,
+                0.51,
+                0.6
+            ],
+            [
+                "2026-03-20",
+                "united states",
+                "2026-03-20T00:00:00",
+                3.73,
+                3.74,
+                3.79,
+                3.8,
+                3.88,
+                4.01,
+                4.39,
+                4.96,
+                0.51,
+                0.65
+            ],
+            [
+                "2026-03-19",
+                "united states",
+                "2026-03-19T00:00:00",
+                3.73,
+                3.73,
+                3.76,
+                3.73,
+                3.79,
+                3.88,
+                4.25,
+                4.83,
+                0.46,
+                0.52
+            ],
+            [
+                "2026-03-18",
+                "united states",
+                "2026-03-18T00:00:00",
+                3.73,
+                3.73,
+                3.74,
+                3.68,
+                3.76,
+                3.87,
+                4.26,
+                4.88,
+                0.5,
+                0.53
+            ],
+            [
+                "2026-03-17",
+                "united states",
+                "2026-03-17T00:00:00",
+                3.74,
+                3.72,
+                3.71,
+                3.63,
+                3.68,
+                3.79,
+                4.2,
+                4.85,
+                0.52,
+                0.48
+            ],
+            [
+                "2026-03-16",
+                "united states",
+                "2026-03-16T00:00:00",
+                3.75,
+                3.72,
+                3.72,
+                3.64,
+                3.68,
+                3.8,
+                4.23,
+                4.86,
+                0.55,
+                0.51
+            ],
+            [
+                "2026-03-13",
+                "united states",
+                "2026-03-13T00:00:00",
+                3.75,
+                3.72,
+                3.7,
+                3.66,
+                3.73,
+                3.87,
+                4.28,
+                4.9,
+                0.55,
+                0.56
+            ],
+            [
+                "2026-03-12",
+                "united states",
+                "2026-03-12T00:00:00",
+                3.76,
+                3.72,
+                3.7,
+                3.66,
+                3.76,
+                3.88,
+                4.27,
+                4.88,
+                0.51,
+                0.55
+            ],
+            [
+                "2026-03-11",
+                "united states",
+                "2026-03-11T00:00:00",
+                3.75,
+                3.71,
+                3.68,
+                3.6,
+                3.64,
+                3.79,
+                4.21,
+                4.86,
+                0.57,
+                0.5
+            ]
+        ]
+    },
+    "MART__FED_FUNDS_DAILY": {
+        "name": "MART__FED_FUNDS_DAILY",
+        "schema": {
+            "TARGET_LOWER": "FLOAT",
+            "TARGET_UPPER": "FLOAT",
+            "FED_FUNDS_RATE": "FLOAT",
+            "FED_FUNDS_DAILY_PII": "TEXT",
+            "OBSERVATION_DATE": "TIMESTAMP_NTZ",
+            "COUNTRY_NAME": "TEXT"
+        },
+        "preview": [
+            [
+                "2026-03-25",
+                "united states",
+                "2026-03-25T00:00:00",
+                null,
+                3.5,
+                null
+            ],
+            [
+                "2026-03-25",
+                "united states",
+                "2026-03-25T00:00:00",
+                null,
+                null,
+                3.75
+            ],
+            [
+                "2026-03-24",
+                "united states",
+                "2026-03-24T00:00:00",
+                3.64,
+                3.5,
+                3.75
+            ],
+            [
+                "2026-03-23",
+                "united states",
+                "2026-03-23T00:00:00",
+                3.64,
+                3.5,
+                3.75
+            ],
+            [
+                "2026-03-22",
+                "united states",
+                "2026-03-22T00:00:00",
+                3.64,
+                3.5,
+                3.75
+            ],
+            [
+                "2026-03-21",
+                "united states",
+                "2026-03-21T00:00:00",
+                3.64,
+                3.5,
+                3.75
+            ],
+            [
+                "2026-03-20",
+                "united states",
+                "2026-03-20T00:00:00",
+                3.64,
+                3.5,
+                3.75
+            ],
+            [
+                "2026-03-19",
+                "united states",
+                "2026-03-19T00:00:00",
+                3.64,
+                3.5,
+                3.75
+            ],
+            [
+                "2026-03-18",
+                "united states",
+                "2026-03-18T00:00:00",
+                3.64,
+                3.5,
+                3.75
+            ],
+            [
+                "2026-03-17",
+                "united states",
+                "2026-03-17T00:00:00",
+                3.64,
+                3.5,
+                3.75
+            ]
+        ]
+    },
+    "MART__FED_FUNDS_MONTHLY": {
+        "name": "MART__FED_FUNDS_MONTHLY",
+        "schema": {
+            "FED_FUNDS_MONTHLY_PII": "TEXT",
+            "FED_FUNDS_RATE": "FLOAT",
+            "OBSERVATION_DATE": "TIMESTAMP_NTZ",
+            "COUNTRY_NAME": "TEXT"
+        },
+        "preview": [
+            [
+                "2026-02-01",
+                "united states",
+                "2026-02-01T00:00:00",
+                3.64
+            ],
+            [
+                "2026-01-01",
+                "united states",
+                "2026-01-01T00:00:00",
+                3.64
+            ],
+            [
+                "2025-12-01",
+                "united states",
+                "2025-12-01T00:00:00",
+                3.72
+            ],
+            [
+                "2025-11-01",
+                "united states",
+                "2025-11-01T00:00:00",
+                3.88
+            ],
+            [
+                "2025-10-01",
+                "united states",
+                "2025-10-01T00:00:00",
+                4.09
+            ],
+            [
+                "2025-09-01",
+                "united states",
+                "2025-09-01T00:00:00",
+                4.22
+            ],
+            [
+                "2025-08-01",
+                "united states",
+                "2025-08-01T00:00:00",
+                4.33
+            ],
+            [
+                "2025-07-01",
+                "united states",
+                "2025-07-01T00:00:00",
+                4.33
+            ],
+            [
+                "2025-06-01",
+                "united states",
+                "2025-06-01T00:00:00",
+                4.33
+            ],
+            [
+                "2025-05-01",
+                "united states",
+                "2025-05-01T00:00:00",
+                4.33
+            ]
+        ]
+    },
+    "MART__SECTOR_PERFORMANCE": {
+        "name": "MART__SECTOR_PERFORMANCE",
+        "schema": {
+            "ROE_PCT": "FLOAT",
+            "ETF_WEEK_52_LOW": "FLOAT",
+            "FINVIZ_CHANGE_TODAY_PCT": "FLOAT",
+            "PE_RATIO": "FLOAT",
+            "ETF_CLOSE": "FLOAT",
+            "ETF_TICKER": "TEXT",
+            "ETF_CHANGE_PCT": "FLOAT",
+            "OPERATING_MARGIN_PCT": "FLOAT",
+            "PB_RATIO": "FLOAT",
+            "ETF_YTD_PCT": "FLOAT",
+            "ROA_PCT": "FLOAT",
+            "CHANGE_1M_PCT": "FLOAT",
+            "FINVIZ_AVG_VOLUME": "FLOAT",
+            "CHANGE_3M_PCT": "FLOAT",
+            "OBSERVATION_DATE": "TIMESTAMP_NTZ",
+            "INDEX_PRICE": "FLOAT",
+            "DIVIDEND_YIELD_PCT": "FLOAT",
+            "MARKET_CAP_USD": "FLOAT",
+            "SECTOR": "TEXT",
+            "FINVIZ_YTD_PCT": "FLOAT",
+            "ETF_VOLUME": "FLOAT",
+            "CHANGE_1W_PCT": "FLOAT",
+            "NET_MARGIN_PCT": "FLOAT",
+            "SECTOR_PII": "TEXT",
+            "INDEX_CHANGE_PCT": "FLOAT",
+            "INDEX_YTD_PCT": "FLOAT",
+            "FORWARD_PE": "FLOAT",
+            "ETF_WEEK_52_HIGH": "FLOAT",
+            "INDEX_NAME": "TEXT",
+            "GROSS_MARGIN_PCT": "FLOAT",
+            "INDEX_MONTH_PCT": "FLOAT"
+        },
+        "preview": [
+            [
+                "basic materials-2026-04-01",
+                "basic materials",
+                "2026-04-01T00:00:00",
+                "XLB",
+                50.46,
+                0.9806,
+                19933661.0,
+                53.3826,
+                36.4215,
+                11.7627,
+                1.95,
+                5.02,
+                -5.07,
+                12.85,
+                13.97,
+                2879020000000.0,
+                25.78,
+                14.4,
+                1.46,
+                1.96,
+                null,
+                null,
+                null,
+                null,
+                null,
+                860910000.0,
+                "SPDR Basic Materials ETF (XLB)",
+                50.46,
+                0.9806,
+                0.0,
+                9.8968
+            ],
+            [
+                "communication services-2026-04-01",
+                "communication services",
+                "2026-04-01T00:00:00",
+                "XLC",
+                111.24,
+                0.3428,
+                8151697.0,
+                119.698,
+                85.0751,
+                -5.203,
+                1.37,
+                0.2,
+                -4.92,
+                -7.2,
+                -6.75,
+                11418740000000.0,
+                36.22,
+                28.07,
+                2.42,
+                0.6,
+                null,
+                null,
+                null,
+                null,
+                null,
+                718450000.0,
+                "SPDR Communication Services ETF (XLC)",
+                111.24,
+                0.3428,
+                0.0,
+                -4.5381
+            ],
+            [
+                "consumer discretionary-2026-04-01",
+                "consumer discretionary",
+                "2026-04-01T00:00:00",
+                "XLY",
+                109.8,
+                0.7524,
+                14450133.0,
+                124.2704,
+                87.4786,
+                -7.8632,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                "SPDR Consumer Discretionary ETF (XLY)",
+                109.8,
+                0.7524,
+                0.0,
+                -7.038
+            ],
+            [
+                "consumer staples-2026-04-01",
+                "consumer staples",
+                "2026-04-01T00:00:00",
+                "XLP",
+                81.46,
+                -0.6343,
+                29601273.0,
+                89.5062,
+                74.2954,
+                5.4564,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                "SPDR Consumer Staples ETF (XLP)",
+                81.46,
+                -0.6343,
+                0.0,
+                5.4428
+            ],
+            [
+                "energy-2026-04-01",
+                "energy",
+                "2026-04-01T00:00:00",
+                "XLE",
+                58.97,
+                -3.7382,
+                96360225.0,
+                62.56,
+                37.0311,
+                32.7562,
+                -2.89,
+                -1.91,
+                6.62,
+                31.39,
+                32.01,
+                4678060000000.0,
+                19.94,
+                14.64,
+                1.73,
+                3.39,
+                null,
+                null,
+                null,
+                null,
+                null,
+                859200000.0,
+                "SPDR Energy ETF (XLE)",
+                58.97,
+                -3.7382,
+                0.0,
+                30.0226
+            ],
+            [
+                "financial-2026-04-01",
+                "financial",
+                "2026-04-01T00:00:00",
+                "XLF",
+                49.44,
+                0.1418,
+                61352519.0,
+                56.1116,
+                43.2521,
+                -9.2676,
+                0.54,
+                0.58,
+                -2.97,
+                -8.37,
+                -7.71,
+                13199990000000.0,
+                16.63,
+                13.17,
+                1.41,
+                2.06,
+                null,
+                null,
+                null,
+                null,
+                null,
+                1580000000.0,
+                "SPDR Financial ETF (XLF)",
+                49.44,
+                0.1418,
+                0.0,
+                -9.5319
+            ],
+            [
+                "healthcare-2026-04-01",
+                "healthcare",
+                "2026-04-01T00:00:00",
+                "XLV",
+                147.73,
+                0.7639,
+                16869040.0,
+                159.5441,
+                126.5137,
+                -4.1749,
+                0.88,
+                1.67,
+                -4.27,
+                -3.96,
+                -3.37,
+                8313520000000.0,
+                28.3,
+                16.93,
+                2.12,
+                1.59,
+                null,
+                null,
+                null,
+                null,
+                null,
+                1420000000.0,
+                "SPDR Healthcare ETF (XLV)",
+                147.73,
+                0.7639,
+                0.0,
+                -4.6124
+            ],
+            [
+                "industrials-2026-04-01",
+                "industrials",
+                "2026-04-01T00:00:00",
+                "XLI",
+                164.43,
+                1.6694,
+                16434166.0,
+                178.3987,
+                114.8719,
+                6.2997,
+                1.7,
+                -0.46,
+                -5.87,
+                6.07,
+                7.1,
+                7201110000000.0,
+                31.14,
+                21.81,
+                1.88,
+                1.15,
+                null,
+                null,
+                null,
+                null,
+                null,
+                1140000000.0,
+                "SPDR Industrials ETF (XLI)",
+                164.43,
+                1.6694,
+                0.0,
+                4.3753
+            ],
+            [
+                "real estate-2026-04-01",
+                "real estate",
+                "2026-04-01T00:00:00",
+                "XLRE",
+                40.95,
+                0.2939,
+                10820252.0,
+                43.6466,
+                35.8341,
+                2.1691,
+                0.33,
+                0.97,
+                -6.46,
+                -0.57,
+                0.45,
+                1657530000000.0,
+                31.38,
+                27.27,
+                2.98,
+                4.0,
+                null,
+                null,
+                null,
+                null,
+                null,
+                466290000.0,
+                "SPDR Real Estate ETF (XLRE)",
+                40.95,
+                0.2939,
+                0.0,
+                2.0932
+            ],
+            [
+                "technology-2026-04-01",
+                "technology",
+                "2026-04-01T00:00:00",
+                "XLK",
+                134.91,
+                1.5124,
+                17015930.0,
+                151.6462,
+                89.3544,
+                -6.1765,
+                1.15,
+                -1.18,
+                -2.42,
+                -6.96,
+                -6.27,
+                24493790000000.0,
+                33.67,
+                23.47,
+                1.23,
+                0.65,
+                null,
+                null,
+                null,
+                null,
+                null,
+                2700000000.0,
+                "SPDR Technology ETF (XLK)",
+                134.91,
+                1.5124,
+                0.0,
+                -6.391
+            ]
+        ]
+    },
+    "MART__STOCK_DETAIL": {
+        "name": "MART__STOCK_DETAIL",
+        "schema": {
+            "TICKER": "TEXT",
+            "IV_PERCENTILE_PCT": "FLOAT",
+            "FAIR_VALUE_USD": "FLOAT",
+            "ROE_PCT": "FLOAT",
+            "OPTIONS_VOLUME": "FLOAT",
+            "IV_HV_RATIO": "FLOAT",
+            "PRICE": "FLOAT",
+            "PE_RATIO": "FLOAT",
+            "IMPLIED_VOLATILITY_PCT": "FLOAT",
+            "PUT_CALL_RATIO": "FLOAT",
+            "DIVIDEND_YIELD_PCT": "FLOAT",
+            "STAR_RATING": "FLOAT",
+            "ECONOMIC_MOAT": "TEXT",
+            "UNCERTAINTY": "TEXT",
+            "INDUSTRY": "TEXT",
+            "IV_HIGH_52W_PCT": "FLOAT",
+            "HISTORICAL_VOLATILITY_30D_PCT": "FLOAT",
+            "VOLUME": "FLOAT",
+            "OBSERVATION_DATE": "TIMESTAMP_NTZ",
+            "MARKET_CAP_USD": "FLOAT",
+            "STOCK_PII": "TEXT",
+            "CHANGE_PCT": "FLOAT",
+            "SECTOR": "TEXT",
+            "PB_RATIO": "FLOAT",
+            "COUNTRY": "TEXT",
+            "COMPANY": "TEXT",
+            "IV_RANK_PCT": "FLOAT",
+            "CURRENT_IV_PCT": "FLOAT",
+            "IV_LOW_52W_PCT": "FLOAT",
+            "PRICE_TO_FAIR_VALUE": "FLOAT",
+            "AVG_IV_30D_PCT": "FLOAT"
+        },
+        "preview": [
+            [
+                "AAL-2026-04-01",
+                "AAL",
+                "2026-04-01T00:00:00",
+                "american airlines group inc",
+                "industrials",
+                "airlines",
+                "usa",
+                54581664.0,
+                11.13,
+                3.63,
+                7350000000.0,
+                67.01,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+            ],
+            [
+                "ABEV-2026-04-01",
+                "ABEV",
+                "2026-04-01T00:00:00",
+                "ambev s.a. adr",
+                "consumer defensive",
+                "beverages - brewers",
+                "brazil",
+                27701699.0,
+                2.97,
+                1.71,
+                46380000000.0,
+                16.7,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+            ],
+            [
+                "ACHR-2026-04-01",
+                "ACHR",
+                "2026-04-01T00:00:00",
+                "archer aviation inc",
+                "industrials",
+                "aerospace & defense",
+                "usa",
+                23227922.0,
+                5.21,
+                0.77,
+                3880000000.0,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+            ],
+            [
+                "ADMA-2026-04-01",
+                "ADMA",
+                "2026-04-01T00:00:00",
+                "adma biologics inc",
+                "healthcare",
+                "biotechnology",
+                "usa",
+                7784103.0,
+                9.11,
+                1.11,
+                2170000000.0,
+                15.21,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+            ],
+            [
+                "AEG-2026-04-01",
+                "AEG",
+                "2026-04-01T00:00:00",
+                "aegon ltd",
+                "financial",
+                "insurance - diversified",
+                "netherlands",
+                8327217.0,
+                7.37,
+                1.52,
+                11090000000.0,
+                10.43,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+            ],
+            [
+                "AES-2026-04-01",
+                "AES",
+                "2026-04-01T00:00:00",
+                "aes corp",
+                "utilities",
+                "utilities - diversified",
+                "usa",
+                10257232.0,
+                14.2,
+                0.78,
+                10120000000.0,
+                10.79,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+            ],
+            [
+                "AG-2026-04-01",
+                "AG",
+                "2026-04-01T00:00:00",
+                "first majestic silver corporation",
+                "basic materials",
+                "silver",
+                "canada",
+                21600482.0,
+                22.17,
+                3.21,
+                10930000000.0,
+                65.88,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+            ],
+            [
+                "AGPU-2026-04-01",
+                "AGPU",
+                "2026-04-01T00:00:00",
+                "axe compute inc",
+                "technology",
+                "software - infrastructure",
+                "usa",
+                88326889.0,
+                3.56,
+                119.75,
+                12090000.0,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+            ],
+            [
+                "AMC-2026-04-01",
+                "AMC",
+                "2026-04-01T00:00:00",
+                "amc entertainment holdings inc",
+                "communication services",
+                "entertainment",
+                "usa",
+                40404799.0,
+                1.03,
+                5.1,
+                574700000.0,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+            ],
+            [
+                "AMDL-2026-04-01",
+                "AMDL",
+                "2026-04-01T00:00:00",
+                "graniteshares 2x long amd daily etf",
+                "financial",
+                "exchange traded fund",
+                "usa",
+                13661787.0,
+                13.04,
+                6.8,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+            ]
+        ]
+    },
+    "MART__STANDARD_MONTH": {
+        "name": "MART__STANDARD_MONTH",
+        "schema": {
+            "ORDER_MONTH": "DATE"
+        },
+        "preview": [
+            [
+                "1947-01-01"
+            ],
+            [
+                "1947-02-01"
+            ],
+            [
+                "1947-03-01"
+            ],
+            [
+                "1947-04-01"
+            ],
+            [
+                "1947-05-01"
+            ],
+            [
+                "1947-06-01"
+            ],
+            [
+                "1947-07-01"
+            ],
+            [
+                "1947-08-01"
+            ],
+            [
+                "1947-09-01"
+            ],
+            [
+                "1947-10-01"
+            ]
+        ]
+    }
+}

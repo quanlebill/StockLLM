@@ -1,0 +1,31 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:www.worldometers.info)",
+      "Bash(cd:*)",
+      "Bash(python:*)",
+      "Write(*)",
+      "WebFetch(domain:fred.stlouisfed.org)",
+      "Bash(curl -s \"https://api.stlouisfed.org/fred/series?series_id=FEDFUNDS&api_key=04b2a09fc1ae2346ac1337e92bbf1979&file_type=json\")",
+      "Bash(py --version)",
+      "Bash(FRED_KEY=\"04b2a09fc1ae2346ac1337e92bbf1979\" SERIES=\"FEDFUNDS DFF DFEDTARL DFEDTARU DGS1MO DGS3MO DGS6MO DGS1 DGS2 DGS5 DGS10 DGS30 T10Y2Y T10Y3M SOFR PRIME MORTGAGE30US\" __NEW_LINE_55fbf042603c97c2__ for s in $SERIES)",
+      "Bash(do curl:*)",
+      "Bash(py -c \"import sys,json; d=json.load\\(sys.stdin\\); s=d[''''seriess''''][0]; print\\(f\"\"{s[''''id'''']}|{s[''''title'''']}|{s[''''frequency'''']}|{s[''''units'''']}|{s[''''observation_start'''']}|{s[''''observation_end'''']}|{s[''''seasonal_adjustment'''']}\"\"\\)\" done)",
+      "Bash(FRED_KEY=\"04b2a09fc1ae2346ac1337e92bbf1979\" for s in JTSJOL BAMLH0A0HYM2)",
+      "Bash(py -c \"import sys,json; d=json.load\\(sys.stdin\\); s=d[''''seriess''''][0]; print\\(f\"\"{s[''''id'''']}|{s[''''title'''']}|{s[''''frequency'''']}|{s[''''units'''']}|{s[''''observation_start'''']}|{s[''''observation_end'''']}\"\"\\)\" done)",
+      "Bash(py:*)",
+      "Bash(cmd //c \"cd D:\\\\Personals\\\\StockLLM\\\\skills\\\\Web_Crawl && python request_Worldometer_method.py --target=/gdp/united-states-gdp/\")",
+      "Bash(cmd //c \"cd D:\\\\Personals\\\\StockLLM\\\\data && python generate_gdp_csv.py\")",
+      "Bash(cmd //c \"set PYTHONIOENCODING=utf-8 && cd D:\\\\Personals\\\\StockLLM\\\\data && python generate_gdp_csv.py\")",
+      "Bash(cmd //c \"echo. > D:\\\\Personals\\\\StockLLM\\\\skills\\\\Web_Crawl\\\\intermediate_response.txt\")",
+      "Bash(cmd //c \"cd D:\\\\Personals\\\\StockLLM\\\\skills\\\\Web_Crawl && python request_Worldometer_method.py --target=/gdp/us-gdp/\")",
+      "Bash(cmd //c \"cd D:\\\\Personals\\\\StockLLM\\\\skills\\\\Web_Crawl && python request_Worldometer_method.py --target=/gdp/canada-gdp/\")",
+      "Bash(cat D:/Personals/StockLLM/API/*)",
+      "Bash(pip list:*)",
+      "Bash(pip install:*)",
+      "Bash(curl -s --max-time 5 -o /dev/null -w \"%{http_code}\" \"https://f404244e.databases.neo4j.io\")",
+      "Bash(nslookup f404244e.databases.neo4j.io)",
+      "mcp__alphavantage__TOOL_LIST"
+    ]
+  }
+}
