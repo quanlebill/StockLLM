@@ -104,13 +104,10 @@ Signals that a message is a comment (not a question):
 If the message contains BOTH feedback AND a new question, log the comment first, then proceed with the normal workflow for the question.
 
 ## Description:
-1. Retrieving base knowledge: check out `instruction/baseknowledge/RETRIEVE_GUIDE.md`
+1. Retrieving base knowledge: refer to `instruction/baseknowledge/RETRIEVE_GUIDE.md`
 
-2. Storing Documents
-- if the user ask for storing document, refer to `instruction/baseknowledge/STORING_GUIDE.md`
+2. Storing Documents: refer to `instruction/baseknowledge/STORING_GUIDE.md`
 
-3. Creating
-- if the user ask for creating, read CREATING.md
+3. Creating: refer to `CREATING.md`
 
-4. Reviewing pipeline
-- Check out instruction/self_improvement
+4. Reviewing pipeline: refer to `instruction/self_improvement`
