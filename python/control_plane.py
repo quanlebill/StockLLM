@@ -290,11 +290,11 @@ def load_last_conversation(maximum_conv = 4) -> MCPStatus:
 
     if conv is None:
         # Key exists in .env but no file found — create a fresh conversation
-        conv = {
-            "conversation_key": key,
-            "conversation_date": datetime.now().isoformat(),
-            "conversation_block": [],
-        }
+        conv = ConversationGroup(
+            conversation_key = key,
+            conversation_block = [],
+            conversation_date = datetime.now().isoformat()
+        ).model_dump()
         _save_conversation(conv)
         return MCPStatus(
             status = "ok",
