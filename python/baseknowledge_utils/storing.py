@@ -1,0 +1,209 @@
+import os
+import json
+import re
+import threading
+from pathlib import Path
+from dotenv import load_dotenv
+
+ROOT = Path(os.environ["STOCKLLM_ROOT"])
+load_dotenv(ROOT / ".env")
+
+import ollama
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
+from neo4j import GraphDatabase
+from typing import Dict, List, Tuple, Any
+from python.basestruct.neo4j_relationship import DocumentRel
+from python.basestruct.base import EntityProperties, AddEntitiesRequest, AddRelationshipRequest, BuildGraphRequest
+from python.basestruct.agent_prompt import OllamaPrompt
+from python.basestruct.base_model import OLLAMA_MODEL
+
+LOCAL_DIR  = ROOT / "baseknowledge" / "local"
+LOCAL_JSON = LOCAL_DIR / "knowledge_graph.json"
+_local_lock = threading.Lock()
+
+
+def _load_local() -> dict:
+    os.makedirs(LOCAL_DIR, exist_ok=True)
+    if not LOCAL_JSON.exists():
+        return {"entities": {}, "relationships": []}
+    with open(LOCAL_JSON, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+
+def _save_local(data: dict):
+    os.makedirs(LOCAL_DIR, exist_ok=True)
+    with open(LOCAL_JSON, "w", encoding="utf-8") as f:
+        json.dump(data, f, indent=2)
+
+
+def _write_local_entity(name: str, props: dict):
+    with _local_lock:
+        data = _load_local()
+        data["entities"][name] = {
+            "summary": props.get("summary", ""),
+            "page_index": props.get("page_index", []),
+            "keywords": props.get("keywords", []),
+            "included_entities": props.get("included_entities", []),
+        }
+        _save_local(data)
+
+
+def _write_local_relationship(from_entity: str, to_entity: str, rel: str):
+    with _local_lock:
+        data = _load_local()
+        entry = [from_entity, rel, to_entity]
+        if entry not in data["relationships"]:
+            data["relationships"].append(entry)
+        _save_local(data)
+
+
+NEO4J_URI = os.getenv("NEO4J_URI", "bolt://localhost:7687")
+NEO4J_USER = os.getenv("NEO4J_USERNAME", "neo4j")
+NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD", "password")
+
+driver = GraphDatabase.driver(NEO4J_URI, auth=(NEO4J_USER, NEO4J_PASSWORD))
+
+app = FastAPI()
+
+# --- Neo4j helpers ---
+
+def _upsert_entity(tx, name: str, props: dict):
+    tx.run(
+        """
+        MERGE (e:Entity {name: $name})
+        SET e.page_index    = $page_index,
+            e.summary       = $summary,
+            e.keywords      = $keywords,
+            e.included_entities = $included_entities
+        """,
+        name=name,
+        page_index=json.dumps(props["page_index"]),
+        summary=props["summary"],
+        keywords=props["keywords"],
+        included_entities=props["included_entities"],
+    )
+
+
+def _add_relationship(tx, from_entity: str, to_entity: str, rel: str):
+    query = (
+        f"MATCH (a:Entity {{name: $from_entity}}), (b:Entity {{name: $to_entity}}) "
+        f"MERGE (a)-[:{rel}]->(b)"
+    )
+    tx.run(query, from_entity=from_entity, to_entity=to_entity)
+
+def _canonical_(phrase: str, relationship = False):
+    if relationship:
+        return phrase.upper().replace(" ", "_")
+    return phrase.lower().replace(" ", "_")
+
+# --- Endpoints ---
+
+@app.post("/entities")
+def add_entities(request: AddEntitiesRequest):
+    """
+    Add or update entities and their properties in the Neo4j graph.
+    Also auto-creates 'related_to' edges from each entity to its included_entities.
+    """
+    with driver.session() as session:
+        for name, props in request.entities.items():
+            name = _canonical_(name)
+            session.execute_write(_upsert_entity, name, props.model_dump())
+            _write_local_entity(name, props.model_dump())
+
+        # Auto-wire included_entities relationships
+        for name, props in request.entities.items():
+            name = _canonical_(name)
+            for child in props.included_entities:
+                child = _canonical_(child)
+                session.execute_write(_add_relationship, name, child, DocumentRel.RELATED_TO)
+                _write_local_relationship(name, child, DocumentRel.RELATED_TO)
+
+    return {"status": "ok", "entities_added": list(request.entities.keys())}
+
+
+@app.post("/relationship")
+def add_relationship(request: AddRelationshipRequest):
+    """Add a named relationship between two existing entities."""
+    rel = _canonical_(request.relationship, True)
+    with driver.session() as session:
+        request.from_entity = _canonical_(request.from_entity)
+        request.to_entity = _canonical_(request.to_entity)
+        try:
+            session.execute_write(_add_relationship, request.from_entity, request.to_entity, rel)
+        except Exception as e:
+            raise HTTPException(status_code=400, detail=str(e))
+    _write_local_relationship(request.from_entity, request.to_entity, rel)
+    return {
+        "status": "ok",
+        "relationship": f"({request.from_entity})-[:{rel}]->({request.to_entity})"
+    }
+
+
+@app.post("/build-graph")
+def build_graph(request: BuildGraphRequest):
+    """
+    Read the pre-summarized summary file (already generated by Ollama3 per page),
+    use Ollama3 to extract entity/relationship structure, then store to Neo4j.
+    Summaries are taken directly from the file — no re-summarization needed.
+    """
+    summary_path = Path(request.summary_file)
+    if not summary_path.exists():
+        raise HTTPException(status_code=404, detail=f"Summary file not found: {request.summary_file}")
+
+    content = summary_path.read_text(encoding="utf-8").strip()
+    if not content:
+        raise HTTPException(status_code=400, detail="Summary file is empty.")
+
+    prompt = OllamaPrompt.get__storing__build_graph_prompt(request.book_name, content)
+
+    try:
+        resp = ollama.generate(model=OLLAMA_MODEL, prompt=prompt, format="json")
+        raw = resp["response"]
+    except Exception as e:
+        raise HTTPException(status_code=502, detail=f"Ollama3 request failed: {e}")
+
+    # Parse JSON from response
+    try:
+        graph = json.loads(raw)
+    except json.JSONDecodeError:
+        # Fallback: extract JSON block if wrapped in markdown
+        match = re.search(r"\{.*\}", raw, re.DOTALL)
+        if not match:
+            raise HTTPException(status_code=422, detail=f"Could not parse Ollama3 response as JSON: {raw[:300]}")
+        graph = json.loads(match.group())
+
+    entities = graph.get("entities", {})
+    relationships = graph.get("relationships", [])
+
+    with driver.session() as session:
+        for name, props in entities.items():
+            name = _canonical_(name)
+            session.execute_write(_upsert_entity, name, props)
+            _write_local_entity(name, props)
+        for rel in relationships:
+            rel['from'] = _canonical_(rel['from'])
+            rel['to'] = _canonical_(rel['to'])
+            session.execute_write(_add_relationship, rel["from"], rel["to"], DocumentRel.RELATED_TO)
+            _write_local_relationship(rel["from"], rel["to"],DocumentRel.RELATED_TO)
+
+    return {
+        "status": "ok",
+        "entities_stored": list(entities.keys()),
+        "relationships_stored": len(relationships),
+    }
+
+
+@app.get("/health")
+def health():
+    try:
+        with driver.session() as session:
+            session.run("RETURN 1")
+        return {"status": "connected"}
+    except Exception as e:
+        raise HTTPException(status_code=503, detail=str(e))
+
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8002)

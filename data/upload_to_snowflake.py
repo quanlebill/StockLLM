@@ -17,42 +17,33 @@ WAREHOUSE = "COMPUTE_WH"
 
 RAW_DIR = os.path.join(os.path.dirname(__file__), "raw")
 
-SERIES_IDS = [
-    "CPIAUCSL", "CPILFESL", "PCEPI", "PCEPILFE",
-    "PCETRIM12M159SFRBDAL", "MEDCPIM159SFRBCLE", "PPIACO",
-    "FEDFUNDS", "DFF", "DFEDTARL", "DFEDTARU",
-    "PAYEMS",
-    "UMCSENT",
-    "DGS1MO", "DGS3MO", "DGS6MO", "DGS1", "DGS2", "DGS5", "DGS10", "DGS30",
-    "T10Y2Y", "T10Y3M",
-]
 
-
-def load_csv(series_id: str) -> list[tuple]:
-    path = os.path.join(RAW_DIR, f"{series_id.lower()}.csv")
+def load_csv(series_id: str) -> tuple:
+    path = os.path.join(RAW_DIR, series_id)
     rows = []
+    schema = []
     with open(path, newline="", encoding="utf-8") as f:
         reader = csv.DictReader(f)
+        schema = list(reader.fieldnames)
         for row in reader:
-            rows.append((row["country"], row["date"], row["value"]))
-    return rows
+            r = tuple(row[key] if row[key] != '' else None for key in schema)
+            rows.append(r)
+    return rows, schema
 
 
-def upload_series(cur, series_id: str) -> None:
+def upload_series(cursor, series_id: str) -> None:
     # Unquoted uppercase so Snowflake stores as uppercase — matches dbt source resolution
-    table = series_id.upper()
-    rows  = load_csv(series_id)
+    table = series_id.upper().replace(".CSV", "").replace(" ", "_")
+    rows, schemas = load_csv(series_id)
 
-    cur.execute(f"""
-        CREATE OR REPLACE TABLE {table} (
-            country VARCHAR,
-            date    VARCHAR,
-            value   VARCHAR
-        )
-    """)
+    col_defs = ", ".join(f'"{col}" VARCHAR' for col in schemas)
+    cursor.execute(f'CREATE OR REPLACE TABLE "{table}" ({col_defs})')
 
-    cur.executemany(
-        f"INSERT INTO {table} (country, date, value) VALUES (%s, %s, %s)",
+    col_count = len(schemas)
+    col_list = ", ".join(f'"{c}"' for c in schemas)
+    placeholders = ", ".join(["%s" for _ in range(col_count)])
+    cursor.executemany(
+        f'INSERT INTO "{table}" ({col_list}) VALUES ({placeholders})',
         rows,
     )
     print(f"  {table}: {len(rows)} rows uploaded")
@@ -71,7 +62,7 @@ if __name__ == "__main__":
 
     print(f"Connected to {DATABASE}.{SCHEMA}\n")
 
-    for sid in SERIES_IDS:
+    for sid in os.listdir(RAW_DIR):
         try:
             upload_series(cur, sid)
         except Exception as e:

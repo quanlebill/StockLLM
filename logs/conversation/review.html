@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Conversation Review</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: monospace; background: #0f0f0f; color: #e0e0e0; display: flex; height: 100vh; }
+
+    /* Sidebar */
+    #sidebar {
+      width: 280px; min-width: 200px; background: #1a1a1a; border-right: 1px solid #333;
+      display: flex; flex-direction: column; overflow: hidden;
+    }
+    #sidebar h2 {
+      padding: 16px; font-size: 13px; color: #aaa; text-transform: uppercase;
+      letter-spacing: 1px; border-bottom: 1px solid #333; flex-shrink: 0;
+    }
+    #key-list { flex: 1; overflow-y: auto; }
+    .key-item {
+      padding: 10px 16px; cursor: pointer; font-size: 12px; color: #ccc;
+      border-bottom: 1px solid #222; word-break: break-all; transition: background 0.15s;
+    }
+    .key-item:hover  { background: #252525; }
+    .key-item.active { background: #1e3a5f; color: #7eb8f7; }
+    #empty-msg { padding: 16px; color: #555; font-size: 12px; }
+
+    /* Main panel */
+    #main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+    #toolbar {
+      padding: 12px 20px; background: #161616; border-bottom: 1px solid #333;
+      display: flex; align-items: center; gap: 12px; flex-shrink: 0;
+    }
+    #current-key { font-size: 13px; color: #888; flex: 1; word-break: break-all; }
+    #conv-date   { font-size: 11px; color: #555; }
+
+    button {
+      padding: 7px 18px; border: none; border-radius: 4px; cursor: pointer;
+      font-size: 13px; font-weight: bold; transition: opacity 0.15s;
+    }
+    button:hover    { opacity: 0.85; }
+    button:disabled { opacity: 0.3; cursor: default; }
+    #btn-success { background: #2e7d32; color: #fff; }
+    #btn-fail    { background: #b71c1c; color: #fff; }
+    #btn-refresh { background: #333; color: #ccc; }
+
+    /* Content area — scrollable to accommodate many blocks */
+    #content-area { flex: 1; min-height: 0; overflow-y: auto; padding: 20px; }
+
+    .placeholder { color: #444; font-size: 14px; margin-top: 80px; text-align: center; }
+
+    /* Conversation block */
+    .conv-block { border: 1px solid #2a2a2a; border-radius: 6px; overflow: visible; margin-bottom: 20px; }
+
+    .block-header {
+      background: #1a1a2e; padding: 8px 14px; font-size: 12px; color: #7eb8f7;
+      border-bottom: 1px solid #2a2a2a; display: flex; justify-content: space-between;
+      align-items: center; border-radius: 6px 6px 0 0;
+    }
+    .block-header span { color: #555; font-size: 11px; }
+    .conv-block .block-section:last-child { border-radius: 0 0 6px 6px; }
+
+    .block-section { border-bottom: 1px solid #1e1e1e; }
+    .block-section:last-child { border-bottom: none; }
+
+    /* Collapsible section header row */
+    .section-toggle {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 14px; cursor: pointer; user-select: none;
+      transition: background 0.12s;
+    }
+    .section-toggle:hover { background: #1a1a1a; }
+
+    .section-label {
+      font-size: 10px; text-transform: uppercase; letter-spacing: 1px; font-weight: bold;
+    }
+    .label-user     { color: #ce9178; }
+    .label-workflow { color: #569cd6; }
+    .label-answer   { color: #9cdcfe; }
+    .label-comment  { color: #c792ea; }
+
+    .toggle-arrow { font-size: 10px; color: #555; transition: transform 0.15s; }
+    .toggle-arrow.open { transform: rotate(90deg); }
+
+    /* Collapsible body */
+    .section-body-wrap { display: none; padding: 0 14px 12px 14px; }
+    .section-body-wrap.open { display: block; }
+
+    .section-body {
+      font-size: 12px; line-height: 1.6; white-space: pre-wrap; word-break: break-word;
+      color: #d4d4d4;
+    }
+    .section-body.user-text   { color: #ce9178; }
+    .section-body.answer-text { color: #9cdcfe; }
+
+    /* Workflow syntax highlighting */
+    .wf-skill-start { color: #569cd6; font-weight: bold; }
+    .wf-success     { color: #4caf50; }
+    .wf-failed      { color: #f44336; }
+    .wf-alternate   { color: #ff9800; font-weight: bold; }
+
+    /* Comment section */
+    .comment-section { padding: 8px 14px 12px 14px; }
+    .comment-input {
+      width: 100%; background: #1e1e1e; border: 1px solid #333; border-radius: 4px;
+      color: #e0e0e0; font-family: monospace; font-size: 12px;
+      padding: 8px 10px; outline: none; resize: vertical; min-height: 70px;
+      display: block;
+    }
+    .comment-input:focus { border-color: #c792ea; }
+    .comment-footer { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
+    .btn-comment { background: #37474f; color: #ccc; padding: 5px 12px; font-size: 12px; font-weight: normal; }
+    .comment-saved { color: #4caf50; font-size: 11px; }
+
+    #status-bar {
+      padding: 8px 20px; background: #111; border-top: 1px solid #222;
+      font-size: 11px; color: #555; flex-shrink: 0;
+    }
+  </style>
+</head>
+<body>
+
+<div id="sidebar">
+  <h2>Awaiting Review</h2>
+  <div id="key-list"><div id="empty-msg">Loading...</div></div>
+</div>
+
+<div id="main">
+  <div id="toolbar">
+    <div style="flex:1; min-width:0;">
+      <div id="current-key">Select a conversation</div>
+      <div id="conv-date"></div>
+    </div>
+    <button id="btn-refresh" onclick="loadList()">Refresh</button>
+    <button id="btn-success" disabled onclick="rate('success')">✓ Success</button>
+    <button id="btn-fail"    disabled onclick="rate('fail')">✗ Fail</button>
+  </div>
+
+  <div id="content-area">
+    <div class="placeholder">← Select a conversation from the sidebar</div>
+  </div>
+
+  <div id="status-bar">Ready</div>
+</div>
+
+<script>
+  const API = 'http://localhost:8000';
+  let selectedKey = null;
+
+  // ---------------------------------------------------------------------------
+  // Sidebar
+  // ---------------------------------------------------------------------------
+
+  async function loadList() {
+    setStatus('Loading list...');
+    try {
+      const res  = await fetch(`${API}/review/list`);
+      const data = await res.json();
+      const list = document.getElementById('key-list');
+      list.innerHTML = '';
+      if (!data.awaiting.length) {
+        list.innerHTML = '<div id="empty-msg">No conversations awaiting review.</div>';
+        setStatus('No awaiting conversations.');
+        return;
+      }
+      data.awaiting.forEach(key => {
+        const div = document.createElement('div');
+        div.className = 'key-item' + (key === selectedKey ? ' active' : '');
+        div.textContent = key;
+        div.onclick = () => loadContent(key);
+        list.appendChild(div);
+      });
+      setStatus(`${data.awaiting.length} conversation(s) awaiting review.`);
+    } catch (e) { setStatus('Error: ' + e.message); }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Load & render conversation
+  // ---------------------------------------------------------------------------
+
+  async function loadContent(key) {
+    selectedKey = key;
+    document.querySelectorAll('.key-item').forEach(el => {
+      el.classList.toggle('active', el.textContent === key);
+    });
+    document.getElementById('current-key').textContent = key;
+    document.getElementById('btn-success').disabled = false;
+    document.getElementById('btn-fail').disabled    = false;
+    setStatus('Loading content...');
+
+    try {
+      const res  = await fetch(`${API}/review/content/${encodeURIComponent(key)}`);
+      const data = await res.json();
+      document.getElementById('conv-date').textContent = data.conversation_date || '';
+      document.getElementById('content-area').innerHTML = '';
+      (data.conversation_block || []).forEach((block, idx) => {
+        document.getElementById('content-area').appendChild(renderBlock(block, idx, key));
+      });
+      setStatus('Loaded: ' + key);
+    } catch (e) {
+      document.getElementById('content-area').innerHTML =
+        `<div class="placeholder">Error loading: ${e.message}</div>`;
+      setStatus('Error: ' + e.message);
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Block renderer
+  // ---------------------------------------------------------------------------
+
+  function renderBlock(block, idx, key) {
+    const wrap = document.createElement('div');
+    wrap.className = 'conv-block';
+
+    // Header
+    const hdr = document.createElement('div');
+    hdr.className = 'block-header';
+    hdr.innerHTML = `<strong>Block ${idx + 1}</strong><span></span>`;
+    wrap.appendChild(hdr);
+
+    // USER — starts expanded (usually short)
+    wrap.appendChild(makeCollapsible('User', 'label-user', escHtml(block.user || ''), 'user-text', true));
+
+    // WORKFLOW — starts collapsed
+    wrap.appendChild(makeWorkflowSection(block.workflow || ''));
+
+    // ANSWER — starts collapsed (can be long)
+    wrap.appendChild(makeCollapsible('Answer', 'label-answer', escHtml(block.answer || ''), 'answer-text', false));
+
+    // COMMENT — always visible, shows existing + input for new text
+    wrap.appendChild(makeCommentSection(block, idx, key));
+
+    return wrap;
+  }
+
+  // Generic collapsible section
+  function makeCollapsible(label, labelClass, html, bodyClass, startOpen) {
+    const sec = document.createElement('div');
+    sec.className = 'block-section';
+
+    const toggle = document.createElement('div');
+    toggle.className = 'section-toggle';
+
+    const arrow = document.createElement('span');
+    arrow.className = 'toggle-arrow' + (startOpen ? ' open' : '');
+    arrow.textContent = '▶';
+
+    const lbl = document.createElement('span');
+    lbl.className = 'section-label ' + labelClass;
+    lbl.textContent = label;
+
+    toggle.appendChild(arrow);
+    toggle.appendChild(lbl);
+
+    const bodyWrap = document.createElement('div');
+    bodyWrap.className = 'section-body-wrap' + (startOpen ? ' open' : '');
+    bodyWrap.innerHTML = `<div class="section-body ${bodyClass}">${html}</div>`;
+
+    toggle.onclick = () => {
+      const open = bodyWrap.classList.toggle('open');
+      arrow.classList.toggle('open', open);
+    };
+
+    sec.appendChild(toggle);
+    sec.appendChild(bodyWrap);
+    return sec;
+  }
+
+  // Workflow collapsible with syntax highlighting
+  function makeWorkflowSection(workflowText) {
+    const sec = document.createElement('div');
+    sec.className = 'block-section';
+
+    const toggle = document.createElement('div');
+    toggle.className = 'section-toggle';
+
+    const arrow = document.createElement('span');
+    arrow.className = 'toggle-arrow';
+    arrow.textContent = '▶';
+
+    const lbl = document.createElement('span');
+    lbl.className = 'section-label label-workflow';
+    lbl.textContent = 'Workflow';
+
+    toggle.appendChild(arrow);
+    toggle.appendChild(lbl);
+
+    const bodyWrap = document.createElement('div');
+    bodyWrap.className = 'section-body-wrap';
+    bodyWrap.innerHTML = highlightWorkflow(workflowText);
+
+    toggle.onclick = () => {
+      const open = bodyWrap.classList.toggle('open');
+      arrow.classList.toggle('open', open);
+    };
+
+    sec.appendChild(toggle);
+    sec.appendChild(bodyWrap);
+    return sec;
+  }
+
+  // Comment section: single editable textarea, pre-filled with existing comment
+  function makeCommentSection(block, idx, key) {
+    const sec = document.createElement('div');
+    sec.className = 'block-section';
+
+    // Header row (non-collapsible)
+    const hdrRow = document.createElement('div');
+    hdrRow.className = 'section-toggle';
+    hdrRow.style.cursor = 'default';
+    const lbl = document.createElement('span');
+    lbl.className = 'section-label label-comment';
+    lbl.textContent = 'Comment';
+    hdrRow.appendChild(lbl);
+    sec.appendChild(hdrRow);
+
+    const body = document.createElement('div');
+    body.className = 'comment-section';
+
+    // Single textarea — pre-filled with existing comment so user can view and edit
+    const input = document.createElement('textarea');
+    input.className = 'comment-input';
+    input.dataset.blockIndex = idx;
+    input.placeholder = `Write a comment for block ${idx + 1}...`;
+    input.value = block.comment || '';
+    body.appendChild(input);
+
+    // Footer: Save button + status
+    const footer = document.createElement('div');
+    footer.className = 'comment-footer';
+    const btn = document.createElement('button');
+    btn.className = 'btn-comment';
+    btn.textContent = 'Save';
+    const savedSpan = document.createElement('span');
+    savedSpan.className = 'comment-saved';
+
+    btn.onclick = async () => {
+      const text = input.value.trim();
+      if (!text) return;
+      try {
+        await fetch(`${API}/conversation/log-comment`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ conversation_key: key, comment: text, block_index: idx }),
+        });
+        block.comment = text;
+        savedSpan.textContent = '✓ Saved';
+        setTimeout(() => { savedSpan.textContent = ''; }, 2000);
+      } catch (e) { savedSpan.textContent = 'Error'; }
+    };
+
+    footer.appendChild(btn);
+    footer.appendChild(savedSpan);
+    body.appendChild(footer);
+    sec.appendChild(body);
+    return sec;
+  }
+
+  function highlightWorkflow(text) {
+    const lines = text.split('\n').map(line => {
+      const e = escHtml(line);
+      if (e.startsWith('---SKILL START---') || e.startsWith('---SKILL END---'))
+        return `<span class="wf-skill-start">${e}</span>`;
+      if (e.includes('Output: SUCCESS')) return `<span class="wf-success">${e}</span>`;
+      if (e.includes('Output: FAILED'))  return `<span class="wf-failed">${e}</span>`;
+      if (e.startsWith('####'))          return `<span class="wf-alternate">${e}</span>`;
+      return e;
+    });
+    return `<div class="section-body">${lines.join('\n')}</div>`;
+  }
+
+  function escHtml(str) {
+    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  // ---------------------------------------------------------------------------
+  // Rate — saves any pending comments first, then moves the file
+  // ---------------------------------------------------------------------------
+
+  async function rate(rating) {
+    if (!selectedKey) return;
+    document.getElementById('btn-success').disabled = true;
+    document.getElementById('btn-fail').disabled    = true;
+
+    // Collect non-empty comment inputs
+    const commentInputs = document.querySelectorAll('.comment-input');
+    const pendingSaves = [];
+    commentInputs.forEach(input => {
+      const text = input.value.trim();
+      if (text) {
+        pendingSaves.push({ idx: parseInt(input.dataset.blockIndex, 10), text });
+      }
+    });
+
+    if (pendingSaves.length) {
+      setStatus(`Saving ${pendingSaves.length} comment(s) before rating...`);
+      try {
+        await Promise.all(pendingSaves.map(({ idx, text }) =>
+          fetch(`${API}/conversation/log-comment`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ conversation_key: selectedKey, comment: text, block_index: idx }),
+          })
+        ));
+      } catch (e) {
+        setStatus('Error saving comments: ' + e.message);
+        document.getElementById('btn-success').disabled = false;
+        document.getElementById('btn-fail').disabled    = false;
+        return;
+      }
+    }
+
+    setStatus(`Moving '${selectedKey}' to ${rating}...`);
+    try {
+      await fetch(`${API}/review/rate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ key: selectedKey, rating }),
+      });
+      setStatus(`Moved '${selectedKey}' to ${rating}.`);
+      selectedKey = null;
+      document.getElementById('current-key').textContent = 'Select a conversation';
+      document.getElementById('conv-date').textContent   = '';
+      document.getElementById('content-area').innerHTML  =
+        '<div class="placeholder">Rated! Select another conversation.</div>';
+      await loadList();
+    } catch (e) {
+      setStatus('Error: ' + e.message);
+      document.getElementById('btn-success').disabled = false;
+      document.getElementById('btn-fail').disabled    = false;
+    }
+  }
+
+  function setStatus(msg) {
+    document.getElementById('status-bar').textContent = msg;
+  }
+
+  // Init
+  loadList();
+</script>
+</body>
+</html>
