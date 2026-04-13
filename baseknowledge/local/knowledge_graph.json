@@ -1,7 +1,7 @@
 {
   "entities": {
     "stock_analysis_curriculum": {
-      "summary": "A top-down stock analysis curriculum for the US market (NYSE/NASDAQ) covering macro analysis, sector selection, stock scanning, fundamental analysis, options strategy, and integrated practice.",
+      "summary": "A top-down approach curriculum for analyzing and selecting US stocks (NYSE/NASDAQ). Covers 7 chapters: Model Overview, Macro Analysis, Sector Analysis, Stock Scanning, Fundamental Analysis, Options Analysis, and Integrated Practice Process.",
       "page_index": [
         [
           0,
@@ -9,29 +9,22 @@
         ]
       ],
       "keywords": [
-        "top down",
+        "top-down",
         "stock analysis",
-        "US market",
         "NYSE",
         "NASDAQ",
         "curriculum",
-        "investment",
-        "options",
-        "macro",
-        "sector",
-        "fundamental",
-        "screening",
-        "portfolio"
+        "investment framework",
+        "equity analysis"
       ],
       "included_entities": [
-        "Top Down Approach Overview",
+        "Top-Down Approach Model",
         "Macro Analysis",
         "Sector Analysis",
-        "Scan And Filter Stocks",
+        "Stock Scanning and Filtering",
         "Fundamental Analysis",
-        "Scan Strike And Probability",
-        "Integrated Practice Process",
-        "Vocabulary"
+        "Options Analysis",
+        "Integrated Practice Process"
       ]
     },
     "top_down_approach_overview": {
@@ -64,7 +57,7 @@
       ]
     },
     "macro_analysis": {
-      "summary": "Macro analysis covers key economic indicators (GDP, CPI, Non-Farm Payroll, ISM, Yield Curve), pain points (geopolitical tensions, banking crises), index support/resistance, and VIX sentiment levels.",
+      "summary": "Evaluates macroeconomic environment using GDP, CPI/inflation, Fed Funds rate, Non-Farm Payroll, ISM Manufacturing, Consumer Confidence, and Yield Curve. Also identifies pain points (geopolitical, banking crises, FX) and index support/resistance via Fibonacci, MA50/200.",
       "page_index": [
         [
           3,
@@ -75,20 +68,23 @@
         "GDP",
         "CPI",
         "inflation",
-        "interest rate",
-        "non-farm payroll",
+        "Fed rate",
+        "NFP",
         "ISM",
         "yield curve",
-        "recession",
         "VIX",
         "pain point",
-        "geopolitical",
-        "fibonacci",
-        "moving average"
+        "support",
+        "resistance",
+        "Fibonacci"
       ],
       "included_entities": [
-        "Economic Indicators",
-        "VIX Analysis"
+        "VIX",
+        "GDP",
+        "CPI",
+        "Non-Farm Payroll",
+        "ISM Manufacturing",
+        "Yield Curve"
       ]
     },
     "economic_indicators": {
@@ -140,7 +136,7 @@
       "included_entities": []
     },
     "sector_analysis": {
-      "summary": "Sector analysis uses RRG charts to identify leading/weakening/lagging/improving sectors, and aligns with macro themes. Technical validation confirms sector strength via ETF breakouts and MA breadth.",
+      "summary": "40-60% of stock performance is sector-driven. Uses RRG charts to classify sectors: Leading (buy), Weakening (monitor/exit), Lagging (avoid), Improving (early entry). Confirms with sector ETF outperforming SPY, above MA50/MA200, and >60% of stocks above MA50.",
       "page_index": [
         [
           5,
@@ -150,25 +146,17 @@
       "keywords": [
         "sector",
         "RRG",
-        "relative rotation",
         "leading",
-        "weakening",
         "lagging",
         "improving",
-        "XLK",
-        "XLF",
-        "XLE",
-        "XLV",
-        "XLI",
-        "XLY",
-        "XLU",
-        "XLP",
+        "weakening",
         "ETF",
-        "macro theme",
-        "breadth"
+        "sector rotation",
+        "MA50",
+        "MA200"
       ],
       "included_entities": [
-        "RRG Charts",
+        "RRG Chart",
         "Macro Themes"
       ]
     },
@@ -199,7 +187,7 @@
       "included_entities": []
     },
     "macro_themes": {
-      "summary": "Long-term macro themes: AI & Cloud (XLK), Financials (XLF), Energy (XLE), Healthcare/Aging Population (XLV), Industrials/Onshoring (XLI), Consumer Discretionary (XLY), Defensives (XLU, XLP, GLD).",
+      "summary": "Long-term structural investment themes: AI/Cloud (XLK), high interest rates/financials (XLF), energy restructuring (XLE + cleantech), aging population/healthcare (XLV), onshoring/industrials (XLI), consumer recovery (XLY), defensives (XLU, XLP, GLD).",
       "page_index": [
         [
           5,
@@ -207,26 +195,16 @@
         ]
       ],
       "keywords": [
-        "macro theme",
         "AI",
         "cloud computing",
-        "XLK",
-        "NVDA",
-        "MSFT",
         "financials",
-        "XLF",
         "energy",
-        "XLE",
         "healthcare",
-        "XLV",
         "industrials",
-        "XLI",
         "consumer",
-        "XLY",
         "defensive",
-        "gold",
-        "GLD",
-        "onshoring"
+        "macro theme",
+        "sector ETF"
       ],
       "included_entities": []
     },
@@ -286,7 +264,7 @@
       "included_entities": []
     },
     "watchlist_management": {
-      "summary": "Build 4 watchlists: READY TO TRADE, ON RADAR, EARNINGS WATCH, SECTOR ROTATION. Limit each to 15-20 stocks.",
+      "summary": "4 watchlists: Ready to Trade (analyzed, awaiting entry), On Radar (not yet eligible), Earnings Watch (upcoming earnings/IV play), Sector Rotation (improving sectors, early entry). Each limited to 15-20 stocks.",
       "page_index": [
         [
           8,
@@ -299,39 +277,31 @@
         "on radar",
         "earnings watch",
         "sector rotation",
-        "position management",
-        "earnings calendar",
-        "IV play"
+        "position management"
       ],
       "included_entities": []
     },
     "fundamental_analysis": {
-      "summary": "Evaluates valuation via P/E, Forward P/E, PEG, P/FCF, DCF, EV/EBITDA. Finds stocks near support with good fundamentals and high IV. Volatility timing: avoid options 2-3 weeks before earnings; IV drops 30-60% post-earnings.",
+      "summary": "Valuation methods: P/E vs industry average, Forward P/E (<20 for growth), PEG ratio (<1 = undervalued), Price/FCF (<25), DCF, EV/EBITDA (<10-12x). 'Broke near support' signal: good fundamentals + near support + low-volume decline + negative catalyst priced in + high IV%.",
       "page_index": [
         [
           9,
-          10
+          9
         ]
       ],
       "keywords": [
         "P/E ratio",
         "forward P/E",
         "PEG ratio",
-        "free cash flow",
         "DCF",
         "EV/EBITDA",
-        "EPS growth",
-        "debt equity",
-        "support zone",
-        "implied volatility",
-        "historical volatility",
-        "earnings",
-        "IV crush"
+        "FCF",
+        "intrinsic value",
+        "valuation",
+        "support",
+        "fundamental"
       ],
-      "included_entities": [
-        "Valuation Methods",
-        "Volatility Analysis"
-      ]
+      "included_entities": []
     },
     "valuation_methods": {
       "summary": "P/E vs industry average, Forward P/E <20 for growth stocks, PEG <1 = undervalued, P/FCF <25, DCF intrinsic value, EV/EBITDA <10-12x. Best opportunities: good fundamentals near support with negative catalyst already priced in.",
@@ -488,7 +458,7 @@
       "included_entities": []
     },
     "integrated_practice_process": {
-      "summary": "Weekly routine + 7-step pre-trade checklist + NVDA March 2025 case study: Sell Put $700, Delta 0.25, POP 75%, DTE 38, premium $450, target $225 gain.",
+      "summary": "Weekly routine: weekend Fed/economic review + RRG sector check, early week VIX + S&P futures check + watchlist update, during week earnings/sector news + position management. 7-step pre-trade checklist: VIX<25, leading sector, top scan, reasonable fundamentals, IV% fit, POP>68% with strike below support, position <5% with stop loss.",
       "page_index": [
         [
           13,
@@ -498,23 +468,17 @@
       "keywords": [
         "weekly routine",
         "checklist",
+        "pre-trade",
         "VIX",
         "sector",
-        "scan",
-        "fundamental",
+        "fundamentals",
         "IV",
         "POP",
         "risk management",
         "NVDA",
-        "practice",
-        "trade workflow",
-        "position review"
+        "practice"
       ],
-      "included_entities": [
-        "Weekly Routine",
-        "Pre Trade Checklist",
-        "NVDA Case Study"
-      ]
+      "included_entities": []
     },
     "weekly_routine": {
       "summary": "Weekend: Fed reports, sector news, RRG. Early week: VIX, S&P futures, watchlist update. Mid-week: earnings calendar. Weekend: review performance, close at 50% profit.",
@@ -619,6 +583,177 @@
         "covered call",
         "glossary",
         "vocabulary"
+      ],
+      "included_entities": []
+    },
+    "top-down_approach_model": {
+      "summary": "5-floor pyramid: Risk Assessment \u2192 Macro Analysis \u2192 Sector Identification \u2192 Stock Evaluation \u2192 Entry Point Selection. Supported by tools including VIX, RRG charts, Finviz, IV percentile, and options probability metrics.",
+      "page_index": [
+        [
+          1,
+          1
+        ]
+      ],
+      "keywords": [
+        "top-down",
+        "pyramid",
+        "risk assessment",
+        "entry point",
+        "macro",
+        "sector",
+        "fundamental",
+        "options"
+      ],
+      "included_entities": [
+        "Risk Assessment",
+        "VIX"
+      ]
+    },
+    "vix": {
+      "summary": "CBOE Volatility Index measuring 30-day S&P 500 volatility. Levels: <15 low risk/buy, 15-20 caution, 20-30 defensive, >30 high fear/reversal possible, >40 crisis/sell puts. VIX Term Structure contango reversals signal immediate fear.",
+      "page_index": [
+        [
+          4,
+          4
+        ]
+      ],
+      "keywords": [
+        "VIX",
+        "volatility index",
+        "fear",
+        "term structure",
+        "contango",
+        "market sentiment",
+        "crisis",
+        "defensive"
+      ],
+      "included_entities": []
+    },
+    "rrg_chart": {
+      "summary": "Relative Rotation Graph with 4 quadrants: Leading (strong momentum), Weakening (losing momentum), Lagging (weak), Improving (recovering). Used to identify sector rotation and early opportunities.",
+      "page_index": [
+        [
+          5,
+          5
+        ]
+      ],
+      "keywords": [
+        "RRG",
+        "relative rotation graph",
+        "sector rotation",
+        "momentum",
+        "quadrant",
+        "leading",
+        "lagging"
+      ],
+      "included_entities": []
+    },
+    "stock_scanning_and_filtering": {
+      "summary": "Narrows thousands of stocks to 10-20 candidates using Barchart (100% Buy, 20MA>50MA, volume >1.5x avg, Large Cap >$10B), IV Percentile (<25 buy, >50 sell), and Finviz screener. Additional filters: price >$10, US-based, weekly gain >2%, SMA20>SMA50, volume >500K/day.",
+      "page_index": [
+        [
+          7,
+          8
+        ]
+      ],
+      "keywords": [
+        "Barchart",
+        "Finviz",
+        "screener",
+        "IV percentile",
+        "moving average",
+        "large cap",
+        "volume",
+        "scan",
+        "filter"
+      ],
+      "included_entities": [
+        "Watchlist Management",
+        "IV Percentile"
+      ]
+    },
+    "iv_percentile": {
+      "summary": "Implied Volatility Percentile vs 1-year history. <25% = cheap options (buy calls/puts), 25-50% = neutral/flexible, >50% = expensive options (sell), >75% = sell strongest premium with high event risk.",
+      "page_index": [
+        [
+          7,
+          7
+        ]
+      ],
+      "keywords": [
+        "IV percentile",
+        "implied volatility",
+        "options pricing",
+        "buy options",
+        "sell options",
+        "premium",
+        "IV crush"
+      ],
+      "included_entities": []
+    },
+    "options_analysis": {
+      "summary": "Covers historical vs implied volatility, IV crush risk near earnings (avoid long options 2-3 weeks before). Delta ranges for strike selection: sell at 0.15-0.30, buy at \u22650.40. POP targets: Short Put >70%, Bull Put Spread >65%, Iron Condor >60%, Covered Call >75%. Execution: 30-45 DTE, \u22645% portfolio per trade, stop loss at 2x premium, take profit at 50% max gain.",
+      "page_index": [
+        [
+          10,
+          12
+        ]
+      ],
+      "keywords": [
+        "implied volatility",
+        "IV crush",
+        "delta",
+        "POP",
+        "DTE",
+        "theta decay",
+        "short put",
+        "iron condor",
+        "covered call",
+        "bull put spread",
+        "options strategy"
+      ],
+      "included_entities": [
+        "Delta and Strike Selection",
+        "Position Sizing and Risk Management"
+      ]
+    },
+    "delta_and_strike_selection": {
+      "summary": "Delta measures option sensitivity per $1 stock move. Ranges: 0.70-0.80 deep ITM, 0.50 ATM, 0.30-0.40 slight OTM (balanced), 0.15-0.25 OTM (high leverage), <0.15 far OTM (lottery). Golden rule: sell at delta 0.15-0.30, buy at delta \u22650.40.",
+      "page_index": [
+        [
+          11,
+          11
+        ]
+      ],
+      "keywords": [
+        "delta",
+        "ITM",
+        "ATM",
+        "OTM",
+        "strike selection",
+        "options sensitivity",
+        "leverage",
+        "probability"
+      ],
+      "included_entities": []
+    },
+    "position_sizing_and_risk_management": {
+      "summary": "Rules: POP >68% required, optimal DTE 30-45 days for Theta decay. Position sizing: \u22645% portfolio per trade, \u226420% in one sector, max 3-4 open positions for beginners. Stop loss at 2x premium paid; take profit at 50% of max gain.",
+      "page_index": [
+        [
+          12,
+          12
+        ]
+      ],
+      "keywords": [
+        "position sizing",
+        "risk management",
+        "POP",
+        "DTE",
+        "theta",
+        "stop loss",
+        "take profit",
+        "portfolio allocation"
       ],
       "included_entities": []
     }
@@ -753,6 +888,111 @@
       "integrated_practice_process",
       "related_to",
       "nvda_case_study"
+    ],
+    [
+      "stock_analysis_curriculum",
+      "RELATED_TO",
+      "top-down_approach_model"
+    ],
+    [
+      "stock_analysis_curriculum",
+      "RELATED_TO",
+      "macro_analysis"
+    ],
+    [
+      "stock_analysis_curriculum",
+      "RELATED_TO",
+      "sector_analysis"
+    ],
+    [
+      "stock_analysis_curriculum",
+      "RELATED_TO",
+      "stock_scanning_and_filtering"
+    ],
+    [
+      "stock_analysis_curriculum",
+      "RELATED_TO",
+      "fundamental_analysis"
+    ],
+    [
+      "stock_analysis_curriculum",
+      "RELATED_TO",
+      "options_analysis"
+    ],
+    [
+      "stock_analysis_curriculum",
+      "RELATED_TO",
+      "integrated_practice_process"
+    ],
+    [
+      "top-down_approach_model",
+      "RELATED_TO",
+      "risk_assessment"
+    ],
+    [
+      "top-down_approach_model",
+      "RELATED_TO",
+      "vix"
+    ],
+    [
+      "macro_analysis",
+      "RELATED_TO",
+      "vix"
+    ],
+    [
+      "macro_analysis",
+      "RELATED_TO",
+      "gdp"
+    ],
+    [
+      "macro_analysis",
+      "RELATED_TO",
+      "cpi"
+    ],
+    [
+      "macro_analysis",
+      "RELATED_TO",
+      "non-farm_payroll"
+    ],
+    [
+      "macro_analysis",
+      "RELATED_TO",
+      "ism_manufacturing"
+    ],
+    [
+      "macro_analysis",
+      "RELATED_TO",
+      "yield_curve"
+    ],
+    [
+      "sector_analysis",
+      "RELATED_TO",
+      "rrg_chart"
+    ],
+    [
+      "sector_analysis",
+      "RELATED_TO",
+      "macro_themes"
+    ],
+    [
+      "stock_scanning_and_filtering",
+      "RELATED_TO",
+      "watchlist_management"
+    ],
+    [
+      "stock_scanning_and_filtering",
+      "RELATED_TO",
+      "iv_percentile"
+    ],
+    [
+      "options_analysis",
+      "RELATED_TO",
+      "delta_and_strike_selection"
+    ],
+    [
+      "options_analysis",
+      "RELATED_TO",
+      "position_sizing_and_risk_management"
     ]
   ]
 }

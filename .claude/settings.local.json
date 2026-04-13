@@ -78,7 +78,9 @@
       "Bash(cp \"/mnt/d/Personals/StockLLM/python/kg_pipeline.py\" \"/mnt/d/Personals/StockLLM/python/self_improvement.py\")",
       "Bash(rm \"/mnt/d/Personals/StockLLM/python/kg_pipeline.py\")",
       "Read(//mnt/d/Personals/StockLLM/**)",
-      "Read(//mnt/c/Users/lemin/.claude/**)"
+      "Read(//mnt/c/Users/lemin/.claude/**)",
+      "Bash(C:/Users/lemin/miniconda3/envs/StockLLM/python.exe D:/Personals/StockLLM/python/mcp_control_plane.py)",
+      "mcp__control-plane__kg_status"
     ]
   }
 }

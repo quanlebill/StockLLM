@@ -112,6 +112,15 @@ def _qdrant_client() -> QdrantClient:
                 collection_name=NOTE_COLLECTION,
                 vectors_config=qm.VectorParams(size=VECTOR_DIM, distance=qm.Distance.COSINE),
             )
+        # Ensure payload index on attached_to exists (required for filtered vector search)
+        try:
+            _qdrant.create_payload_index(
+                collection_name=NOTE_COLLECTION,
+                field_name="attached_to",
+                field_schema=qm.PayloadSchemaType.KEYWORD,
+            )
+        except Exception:
+            pass  # index already exists — safe to ignore
     return _qdrant
 
 
@@ -406,6 +415,27 @@ def _store_in_qdrant(point_id: str, content: str, attached_to: str, now: str) ->
         )],
     )
     return qdrant_id
+
+
+def search_policy_qdrant_ids(query_vector: list[float], top_k: int = 5) -> list[str]:
+    """
+    Vector search in Qdrant filtered to policy points only.
+    Returns a list of qdrant_ids for the top-k matching policies.
+    Used to supplement entity-name-based policy lookup with semantic matching.
+    """
+    hits = _qdrant_client().query_points(
+        collection_name=NOTE_COLLECTION,
+        query=query_vector,
+        query_filter=qm.Filter(
+            must=[qm.FieldCondition(
+                key="attached_to",
+                match=qm.MatchValue(value="policy"),
+            )]
+        ),
+        limit=top_k,
+        with_payload=False,
+    ).points
+    return [str(h.id) for h in hits]
 
 
 def fetch_context_by_ids(qdrant_ids: list[str], query_vector: list[float], top_k: int = 5) -> list[dict]:

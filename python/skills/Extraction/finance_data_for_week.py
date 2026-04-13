@@ -23,7 +23,7 @@ Importances = {
     '^VIX': 'Fear Index',
     '^GSPC': 'S&P 500',
 }
-__DIR__ = Path(os.path.join(os.path.dirname(__file__), "../../..", "..", "data"))
+__DIR__ = Path(os.environ["STOCKLLM_ROOT"], "data")
 if __name__ == "__main__":
     ticker = sys.argv[1] if len(sys.argv) > 1 else None
     if ticker is None:

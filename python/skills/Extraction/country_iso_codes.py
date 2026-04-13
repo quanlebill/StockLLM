@@ -11,7 +11,7 @@ import os
 import csv
 import pycountry
 
-OUTPUT_DIR = os.path.join(os.path.dirname(__file__), "..", "..", "data", "raw")
+OUTPUT_DIR = os.path.join(os.environ["STOCKLLM_ROOT"], "data", "raw")
 
 
 def main():

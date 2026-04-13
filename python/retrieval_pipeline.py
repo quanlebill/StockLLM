@@ -35,7 +35,7 @@ from python.basestruct.base_model import OLLAMA_MODEL
 
 import entity_resolver
 from cache_query import cache_lookup, embed
-from self_improvement import fetch_context_by_ids
+from self_improvement import fetch_context_by_ids, search_policy_qdrant_ids
 
 _ROOT = os.environ["STOCKLLM_ROOT"]
 load_dotenv(Path(_ROOT) / ".env")
@@ -226,17 +226,16 @@ def kg_query_graph(entities: str, relationship: str = "", direction: str = "") -
         raise HTTPException(status_code=500, detail=str(exc))
 
 
-def kg_query_policy(entity_names: list[str]) -> list[dict]:
-    """Query policies where any of the given canonical entity names appear.
-    Returns CAUSED_BY (trigger conditions) and AFFECTS (impacted entities) edges for each match."""
-    if not entity_names:
+def kg_query_policy(qdrant_ids: list[str]) -> list[dict]:
+    """Look up policies by Qdrant point IDs and return with CAUSED_BY / AFFECTS edges."""
+    if not qdrant_ids:
         return []
     try:
         with driver.session() as session:
             records = session.run(
                 """
                 MATCH (p:Policy)
-                WHERE any(e IN p.entities WHERE e IN $names)
+                WHERE p.qdrant_id IN $ids
                 OPTIONAL MATCH (p)-[:CAUSED_BY]->(cause:Entity)
                 OPTIONAL MATCH (p)-[:AFFECTS]->(aff:Entity)
                 RETURN p.description  AS description,
@@ -245,9 +244,8 @@ def kg_query_policy(entity_names: list[str]) -> list[dict]:
                        p.qdrant_id    AS qdrant_id,
                        collect(DISTINCT cause.name) AS caused_by,
                        collect(DISTINCT aff.name)   AS affects
-                ORDER BY p.created_at DESC
                 """,
-                names=entity_names,
+                ids=qdrant_ids,
             ).data()
         return records
     except Exception as exc:
@@ -551,23 +549,34 @@ async def _lightrag_query(entities: list[str], relationship: str, direction: str
     keypoints: str = ""
     qdrant_hits: list = []
 
-    # Stage 1: Concurrent — graph query + policy query + doc search
+    # Stage 0: Embed query — needed for both policy vector search and Qdrant context ranking
+    query_text = f"{' '.join(entities)} {relationship}".strip()
+    query_vec = await asyncio.to_thread(embed, query_text)
+
+    # Stage 1: Concurrent — graph query + policy Qdrant search + doc search
     graph_task = asyncio.to_thread(
         kg_query_graph,
         entities=", ".join(entities),
         relationship=relationship,
         direction=direction,
     )
-    policy_task = asyncio.to_thread(kg_query_policy, entity_names=entities)
+    policy_vec_task = asyncio.to_thread(search_policy_qdrant_ids, query_vec, 5)
     search_tasks = [
         asyncio.to_thread(search, keyword=ent.replace("_", " "), limit=5)
         for ent in entities[:3]
     ]
 
-    stage1 = await asyncio.gather(graph_task, policy_task, *search_tasks, return_exceptions=True)
+    stage1 = await asyncio.gather(graph_task, policy_vec_task, *search_tasks, return_exceptions=True)
     graph_result = stage1[0] if not isinstance(stage1[0], Exception) else {}
-    policy_result = stage1[1] if not isinstance(stage1[1], Exception) else []
+    policy_vec_ids = stage1[1] if not isinstance(stage1[1], Exception) else []
     search_responses = stage1[2:]
+
+    # Hydrate policy nodes from Neo4j using Qdrant IDs → recovers CAUSED_BY / AFFECTS edges
+    if policy_vec_ids:
+        try:
+            policy_result = await asyncio.to_thread(kg_query_policy, policy_vec_ids)
+        except Exception as e:
+            print(f"[retrieval_pipeline] policy hydration failed: {e}")
 
     # Stage 2: Collect qdrant_ids from entities + policies → ID-filtered Qdrant search
     entity_qdrant_ids = []
@@ -579,8 +588,6 @@ async def _lightrag_query(entities: list[str], relationship: str, direction: str
 
     if all_qdrant_ids:
         try:
-            query_text = f"{' '.join(entities)} {relationship}".strip()
-            query_vec = await asyncio.to_thread(embed, query_text)
             qdrant_hits = await asyncio.to_thread(fetch_context_by_ids, all_qdrant_ids, query_vec, 5)
         except Exception as e:
             print(f"[retrieval_pipeline] qdrant fetch failed: {e}")

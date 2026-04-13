@@ -621,3 +621,388 @@ Here is a concise summary of the vocabulary table:
 * Cash Secured Put: selling puts with enough cash to buy stocks
 * Covered Call: selling calls while holding stocks, increasing portfolio income
 
+- page_index: 0
+Here is a concise summary of the page content:
+
+The curriculum provides an overview of the Top-Down Approach for analyzing and selecting stocks in the US stock market (NYSE/NASDAQ). The chapters cover:
+
+1. Model Overview
+2. Macro Analysis
+3. Sector Analysis
+4. Stock scanning and filtering
+5. Fundamental Analysis
+6. Options analysis (Scan, Strike & Probability)
+7. Integrated Practice Process
+
+This curriculum is focused on the US market and can be applied to stocks listed on the NYSE or NASDAQ.
+
+- page_index: 0
+Overview of the Top-Down Approach curriculum for analyzing and selecting US stocks (NYSE/NASDAQ). Covers 7 chapters: Model Overview, Macro Analysis, Sector Analysis, Stock Scanning, Fundamental Analysis, Options Analysis, and Integrated Practice Process.
+
+- page_index: 1
+Here is a concise summary of the page content:
+
+The Top Down Approach to investment analysis is a holistic method that starts with macroeconomic environment and works its way down to specific stocks. The approach is visualized as a pyramid with 5 floors:
+
+1. Risk assessment (pyramid top)
+2. Macroeconomic analysis
+3. Sector identification (leading and weak sectors)
+4. Stock evaluation (intrinsic value, corporate finance)
+5. Entry point selection (probability of winning)
+
+The Top Down Approach is useful because it helps investors understand the big picture, invest in favor of macro trends, know when to defend or attack, and combine with options strategies.
+
+Each floor of the pyramid has two supporting tools:
+
+* Analysis Floor Tools: indicators such as macros economy, pain point, index support & resistance, VIX, sector RRG charts, macro theme, technical analysis, scan stock barchart, IV_percentile, watchlist, Finviz
+* Usage Indicators: fair/under valued, broke down near support, historical/implied vol, strike & prob, delta, support, valuation, probability
+
+This approach helps investors make informed investment decisions by considering the overall risk environment and market trends.
+
+- page_index: 1
+The Top-Down Approach is a 5-floor pyramid: Risk Assessment → Macro Analysis → Sector Identification → Stock Evaluation → Entry Point Selection. Tools at each level include macro indicators, VIX, sector RRG charts, Finviz scans, IV percentile, and options probability metrics. The method helps investors align with macro trends and combine fundamental analysis with options strategies.
+
+- page_index: 2
+(empty page)
+
+- page_index: 2
+Empty page.
+
+- page_index: 3
+Here's a concise summary of Chapter 2: Macro Analysis:
+
+**Key Concepts:**
+
+1. Understanding macroeconomic indicators to inform investment decisions.
+2. Identifying "pain points" - unusual factors impacting the market.
+
+**Economic Indicators:**
+
+1. GDP growth rate (>2% = good)
+2. CPI/Inflation (high inflation = Fed raises interest rates, affecting growth stocks)
+3. Non-Farm Payroll (increased employment = strong consumption = good corporate earnings)
+4. ISM Manufacturing (above 50 = expanding industry)
+5. Consumer Confidence (retail spending forecast)
+
+**Pain Points:**
+
+1. Geopolitical tensions
+2. Regional banking crises (e.g., SVB 2023)
+3. Sudden exchange rate fluctuations
+4. Earnings season events
+
+**Index Support & Resistance:**
+
+1. Determine the main index's technical structure.
+2. Focus on technology, high-growth stocks, and traditional economy blue-chip stocks.
+3. Use weekly charts, historical congestion areas, Fibonacci retracements, and 50/200 MA to analyze support and resistance levels.
+
+By understanding these macroeconomic indicators, pain points, and index support & resistance levels, investors can make more informed decisions about their investments.
+
+- page_index: 3
+Chapter 2 - Macro Analysis: Key economic indicators include GDP (>2% good), CPI/Inflation (high inflation triggers Fed rate hikes affecting growth stocks), Non-Farm Payroll (employment strength), ISM Manufacturing (>50 = expansion), and Consumer Confidence. Pain points include geopolitical tensions, banking crises, FX fluctuations, and earnings season. Index support/resistance is analyzed via weekly charts, Fibonacci retracements, and 50/200 MA.
+
+- page_index: 4
+Here's a concise summary of the page content:
+
+**VIX (Volatility Index) Interpretation**
+
+* Low risk: VIX < 15 → Confident market with strong buying opportunities
+* Normal market: VIX 15-20 → Caution advised
+* Volatility increases: VIX 20-30 → Decrease and defensive shift
+* High fear: VIX > 30 → Market reversal possible, consider buying in the opposite direction
+* Crisis mode: VIX > 40 → Consider selling puts or accumulating long-term
+
+**Additional Insights**
+
+* Watch VIX Term Structure (VIX9D vs VIX vs VIX3M vs VIX6M) for contango reversals, indicating immediate market fear, not long-term trend.
+
+- page_index: 4
+VIX interpretation levels: <15 = low risk/strong buying; 15-20 = normal/caution; 20-30 = elevated volatility, shift defensive; >30 = high fear, possible reversal; >40 = crisis, sell puts or accumulate long-term. VIX Term Structure (VIX9D vs VIX vs VIX3M vs VIX6M) contango reversals signal immediate fear, not long-term trend shifts.
+
+- page_index: 5
+Here is a concise summary of the page content:
+
+**Sector Analysis**
+
+* Identify a leading sector to inform investment decisions
+* Research shows 40-60% of a stock's performance comes from its industry
+* Use Relative Rotation Graphs (RRGs) to analyze sectors and industries
+
+**RRG Chart Interpretation**
+
+* Four quadrants:
+	+ Leading: Strong industry, accelerating momentum → BUY
+	+ Weakening: Strong industry, decreasing momentum → Monitor/exiting
+	+ Lagging: Weak industry, no improvement → AVOID
+	+ Improving: Weak industry, recovering → Monitor/early opportunities
+
+**Macro Themes**
+
+* Align portfolios with strong cash flow themes:
+	+ AI & Cloud Computing (XLK): NVDA, MSFT, GOOGL, AMD
+	+ Prolonged high interest rates: JPM, BAC, GS
+	+ Energy restructuring: XOM, CVX + Cleantech: ENPH, NEE
+	+ Aging Population: UNH, LLY, JNJ, MDT
+	+ Onshoring/Reshoring: CAT, DE, ETN, HON
+	+ Consumer recovery: AMZN, HD, NKE
+	+ Defensive play: Utilities (XLU), Consumer Staples (XLP), Gold (GLD)
+
+- page_index: 5
+Chapter 3 - Sector Analysis: 40-60% of stock performance is driven by its sector. Use RRG (Relative Rotation Graphs) to classify sectors into Leading (buy), Weakening (monitor/exit), Lagging (avoid), Improving (early opportunity). Macro themes to align with: AI/Cloud (XLK), high interest rates (financials), energy restructuring, aging population (healthcare), onshoring (industrials), consumer recovery, and defensives (XLU, XLP, GLD).
+
+- page_index: 6
+Here is a concise summary of the page content:
+
+To validate your leading industry using Technical Analysis:
+
+* If XLK (tech ETF) rises stronger than SPY (S&P 500), it's leading.
+* A sector ETF breaks above resistance with high volume, consider it an entry signal.
+* Confirm a bullish trend by checking if the sector ETF is above both MA 50 and MA 200.
+* Additionally, check if >60% of stocks in the industry are above MA 50 to ensure a healthy industry.
+
+- page_index: 6
+Validating a leading sector via Technical Analysis: sector ETF outperforms SPY, breaks resistance on high volume, trades above MA50 and MA200, and >60% of stocks in the industry are above MA50. These confirm a healthy, trending sector.
+
+- page_index: 7
+Here's a concise summary of Chapter 4: SCAN & FILTER STOCKS on page #7:
+
+**Objective:** Reduce thousands of stocks to 10-20 candidates in the target industry.
+
+**Tools:**
+
+1. **Barchart Screener**: Filter using technical data, including:
+	* 100% Buy or Strong Buy (Overall opinion)
+	* 20-Day Moving Average above 50-Day MA
+	* Today's Volume > 20-Day Average Volume (1.5x)
+	* Large Cap (>10B) to reduce volatility risk
+2. **IV Percentile (IV%)**: Filter using Implied Volatility data:
+	* IV% < 25: Buy options (Long Call/Put, Debit Spread) - cheap options
+	* IV% 25-50: Neutral Zone - flexible strategies
+	* IV% > 50: Sell options (Short Put, Iron Condor, Strangle) - expensive options
+	* IV% > 75: Sell strongest premium, high event risk
+3. **Finviz Composite Screener**: Combine technical and fundamental analysis to find uptrending stocks.
+
+These tools help identify potential stocks in the target industry, reducing the number of candidates from thousands to around 10-20.
+
+- page_index: 7
+Chapter 4 - Stock Scanning & Filtering: Narrow thousands of stocks to 10-20 candidates using three tools: (1) Barchart Screener — filter for 100% Buy signal, 20MA > 50MA, volume >1.5x average, Large Cap >$10B; (2) IV Percentile — <25% buy options, 25-50% flexible, >50% sell options, >75% sell premium; (3) Finviz composite screener combining technical and fundamental filters.
+
+- page_index: 8
+Here is a concise summary of the page content:
+
+**Filtering**
+
+* Large or mid-cap stocks ($10B+ or $2B-$10B)
+* Price above $10 (avoid penny stocks)
+* USA-based companies
+* Performance:
+	+ Weekly gain > 2%
+	+ Monthly positive EPS growth
+	+ SMA20 above SMA50
+* Volume: over 500K/day for guaranteed liquidity
+
+**Building a Watchlist**
+
+* Organize filtered stocks into 4 watchlists:
+	1. READY TO TRADE (fully analyzed, waiting for entry points)
+	2. ON RADAR (not yet eligible)
+	3. EARNINGS WATCH (upcoming earnings, opportunities IV play)
+	4. SECTOR ROTATION (stocks from improving industry, set to enter early)
+* Limit each watchlist to 15-20 shares for effective management
+
+- page_index: 8
+Stock filtering criteria: Large/mid-cap ($2B+), price >$10, US-based, weekly gain >2%, positive monthly EPS growth, SMA20 > SMA50, volume >500K/day. Watchlists are organized into 4 categories: Ready to Trade, On Radar, Earnings Watch, and Sector Rotation — each limited to 15-20 stocks.
+
+- page_index: 9
+Here's a concise summary of Chapter 5: Fundamental Analysis:
+
+**Tier 2:** Evaluate stock valuation using various methods:
+
+1. **P/E Ratio**: Compare with industry average (lower P/E = cheaper).
+2. **Forward P/E**: Use next year's EPS; <20 for growth stocks = reasonable.
+3. **PEG Ratio**: P/E divided by EPS growth rate; <1 = potentially undervalued.
+4. **Price/Free Cash Flow**: <25 = reasonable valuation.
+5. **DCF (Discounted CF)**: Intrinsic valuation based on future cash flows.
+6. **EV/EBITDA**: Common in M&A; <10-12x = reasonable with most sectors.
+
+**Broke Down Near Support**: Combine technical and fundamental filters:
+
+* Good fundamentals (EPS growth, positive FCF, low debt/equity)
+* Trading near historical support zone
+* Low volume when falling below average
+* Negative catalyst already priced in
+* High implied volatility (IV%) = opportunity to sell put and buy at a better price
+
+**Historical & Implied Volatility**: Not detailed further in this chapter.
+
+- page_index: 9
+Chapter 5 - Fundamental Analysis: Valuation methods include P/E vs industry average, Forward P/E (<20 for growth stocks), PEG ratio (<1 = undervalued), Price/FCF (<25), DCF intrinsic value, and EV/EBITDA (<10-12x). Also uses 'broke near support' signals: good fundamentals + near support + low-volume decline + negative catalyst priced in + high IV% as a put-selling opportunity.
+
+- page_index: 10
+Here is a concise summary of the page content:
+
+Understanding volatility helps inform strategy and timing. There are two types of volatility:
+
+1. Actual historical fluctuations over 20-30 days.
+2. Predicted future volatility based on options prices.
+
+This information can guide trading decisions, such as:
+
+* Buying (long) options when they're cheap.
+* Selling (shorting) options when they're expensive.
+
+Before entering a trade, consider the following:
+
+* Avoid short-term option trades within 2-3 weeks of earnings release.
+* After earnings, implied volatility often drops by 30-60%, making long options less effective even if the stock moves in the right direction.
+* Research how much the stock usually moves after earnings (using tools like Market Chameleon).
+
+- page_index: 10
+Volatility types: Historical volatility (20-30 day actual fluctuations) vs Implied volatility (market's predicted future vol from options prices). Strategy: buy options when IV is cheap, sell when expensive. Avoid short-term long options within 2-3 weeks of earnings — IV crush post-earnings (30-60% drop) can negate directional gains. Use Market Chameleon to research typical post-earnings moves.
+
+- page_index: 11
+Here's a concise summary of the page content:
+
+**CHAPTER 6: SCAN STRIKE & PROBABILITY**
+
+* This chapter translates analysis into specific trading decisions, crucial for option traders.
+* **Delta**: measures option sensitivity to underlying stock price changes. Key ranges:
+	+ 0.70-0.80 (Deep ITM): high win probability, low leverage
+	+ 0.50 (ATM): equilibrium point, 50-50 probability
+	+ 0.30-0.40 (Slight OTM): balance between probability and profit
+	+ 0.15-0.25 (OTM): low win rate, high leverage
+	+ < 0.15 (Far OTM): lottery ticket, very low win rate
+* **Golden Rule**: when selling options, choose a short strike with Delta 0.15-0.30; when buying options, choose Delta ≥ 0.40.
+* **Probability of Profit (POP)**: the probability of a profitable position at maturity. POP criteria for different strategies:
+	+ Short Put/Cash Secured Put: POP > 70%
+	+ Bull Put Spread: POP > 65%, Risk/Reward ≥ 1:1
+	+ Iron Condor: POP > 60%, small profit
+	+ Covered Call: POP > 75%, strike on nearest resistance
+	+ Long Call/Put: No POP, use Risk/Reward ≥ 2:1
+
+Overall, this chapter provides guidelines for selecting optimal strikes and evaluating the probability of profit in various trading strategies.
+
+- page_index: 11
+Chapter 6 - Strike & Probability: Delta ranges — 0.70-0.80 deep ITM (high win rate, low leverage), 0.50 ATM, 0.30-0.40 slight OTM (balanced), 0.15-0.25 OTM (high leverage), <0.15 far OTM (lottery). Golden Rule: sell options at delta 0.15-0.30, buy at delta ≥0.40. POP targets: Short Put >70%, Bull Put Spread >65% with 1:1 R/R, Iron Condor >60%, Covered Call >75%, Long Call/Put uses R/R ≥2:1.
+
+- page_index: 12
+Here's a concise summary of the page content:
+
+**Key Concepts:**
+
+1. **POP test**: Win rate must be > 68% for statistical significance.
+2. **Fair Value**: Entry price reasonableness check when assigned stocks.
+3. **Select Expiration**: Optimal Theta decay at 30-45 Days to Expiration (DTE).
+4. **Position Sizing**:
+	* Each transaction ≤ 5% of total portfolio
+	* No more than 20% in same sector
+	* No more than 3-4 open options positions at once (for newbies)
+5. **Risk Management:**
+	* Stop loss: close order if option loses 2x initial fee
+	* Take profit: close early when reaching 50% of maximum profit
+
+- page_index: 12
+Options trade execution rules: POP must be >68% for statistical significance. Optimal expiration is 30-45 DTE for Theta decay. Position sizing: ≤5% of portfolio per trade, ≤20% in one sector, max 3-4 open positions (beginners). Risk management: stop loss at 2x premium paid, take profit at 50% of max gain.
+
+- page_index: 13
+Here's a concise summary of Chapter 7: Integrated Practice Process:
+
+**Weekly Routine**
+
+* Weekend:
+	+ Review Fed report and economic calendar
+	+ Identify leading sectors using RRG chart
+* Early week:
+	+ Check VIX and S&P futures before the open
+	+ Update watchlist from Finviz/Barchart
+* During the week:
+	+ Follow earnings calendar and sector news
+	+ Manage open positions
+* Weekends:
+	+ Review performance and close positions to reach 50% profit
+	+ Prepare for the new week
+
+**7-Step Checklist before placing an order**
+
+1. Macro: VIX < 25? (not in strong downtrend)
+2. Sector: Leading or Improving sector?
+3. Scan: Top of the list using Barchart/Finviz
+4. Fundamental: Reasonable P/E, EPS growth, and debt?
+5. IV%: Strategic fit (buy low, sell high)
+6. Strike & Probability: POP > 68%, strike below support
+7. Risk Management: Position < 5% of portfolio, clear stop loss?
+
+**Real-Life Example: NVDA Stock Analysis**
+
+* Applied Top Down scenario to analyze NVDA stock in March 2025
+* Considered macroeconomic factors (GDP growth, VIX), sector advantages (XLK leading corner), and fundamental analysis
+
+- page_index: 13
+Chapter 7 - Integrated Practice Process: Weekly routine covers Fed report/economic calendar review (weekend), VIX + S&P futures check (early week), earnings/sector news + position management (during week), performance review (weekend). 7-step pre-trade checklist: (1) VIX <25, (2) Leading/Improving sector, (3) Top of Barchart/Finviz scan, (4) Reasonable fundamentals, (5) IV% strategic fit, (6) POP >68% with strike below support, (7) Position <5% portfolio with clear stop loss.
+
+- page_index: 14
+Here's a concise summary of the page content:
+
+**Stock Analysis:**
+
+* Stock: NVDA
+* Signal: 100% Buy Signal on Barchart
+* Key metrics:
+	+ Fundamental Forward P/E: 35x
+	+ EPS growth: 120% YoY
+	+ Strong positive FCF
+
+**Strategy:**
+
+* Sell a put option with the following parameters:
+	+ Strike price: $700 (below support level)
+	+ Delta: 0.25
+	+ POP: 75%
+	+ DTE: 38 days
+
+**Risk Management:**
+
+* Collateral required: $70,000 ($700 x 100)
+* Premium collection: $450
+* Potential gain: $225
+
+**Tools and Resources:**
+
+* StockCharts.com: RRG Chart, technical analysis of industry and stocks
+* Finviz.com: Screener combining fundamental + technical, industry heatmap
+* Barchart.com: Screener (technical), IV Percentile, options data
+* Market Chameleon: IV history, earnings moves, options analytics
+* CME FedWatch Tool: Tracking probability of Fed changing interest rates
+* Investing.com: Economic Calendar, real-time macro data
+* Tastytrade/ThinkorSwim: Options trading platform with full analytics
+* Morningstar: Fair Value estimate, fundamental data
+
+- page_index: 14
+Real-life NVDA example (March 2025): 100% Buy on Barchart, Forward P/E 35x, EPS growth 120% YoY, strong FCF. Trade: sell put at $700 strike (delta 0.25, POP 75%, 38 DTE), collateral $70K, premium $450, target gain $225. Key tools referenced: StockCharts (RRG/TA), Finviz (screener/heatmap), Barchart (IV%), Market Chameleon (earnings moves), CME FedWatch, Investing.com (macro calendar), Tastytrade/TOS (options platform), Morningstar (fair value).
+
+- page_index: 15
+Here is a concise summary of the page content:
+
+**Vocabulary Table & Quick Reference**
+
+* Key terms:
+	+ VIX: CBOE Volatility Index, measuring S&P 500's 30-day volatility
+	+ IV: Implied Volatility, percentile comparison to 1-year history
+	+ Delta: Coefficient measuring option price change when stock rises/falls by $1
+	+ POP: Probability of Profit at expiration
+	+ DTE: Days To Expiration, number of days until option expires
+	+ Theta: Time decay, value lost each day due to option expiration
+	+ RRG: Relative Rotation Graph, comparing industry rotations
+* Concepts:
+	+ IV Crush: sudden IV drop after major event (e.g. earnings), causing losses for long options
+	+ Support/Resistance: important price zones where prices bounce or are blocked
+	+ Options strategies:
+		- Short Put: obligation to buy shares if price falls
+		- Iron Condor: 4-legged strategy making money in low-volatility markets
+		- Cash Secured Put: selling puts with enough cash to buy stocks, "buying cheaper"
+		- Covered Call: selling calls while holding stocks, increasing portfolio income
+
+- page_index: 15
+Vocabulary & Quick Reference: VIX (30-day S&P 500 volatility index), IV% (implied volatility percentile vs 1-year history), Delta (option price sensitivity per $1 stock move), POP (probability of profit at expiration), DTE (days to expiration), Theta (daily time decay), RRG (Relative Rotation Graph for sector rotation). Key concepts: IV Crush (sudden IV drop post-event hurting long options), Support/Resistance. Strategies: Short Put, Iron Condor, Cash Secured Put, Covered Call.
+
