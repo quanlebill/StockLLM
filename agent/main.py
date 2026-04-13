@@ -6,7 +6,7 @@ import json
 import uuid
 from datetime import datetime
 from agent_state import AgentState, SkillSubGraphState, ResponseStatus
-from skill import SkillLog, GraphLog, skill_log, graph_log
+from logger import SkillLog, GraphLog, skill_log, graph_log
 
 from skills.mcp_control_plane import FuncRetrieveArgs_Hint, FuncRetrieveArgs_Usage_Prompt, FuncRetrieveArgs
 
