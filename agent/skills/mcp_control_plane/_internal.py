@@ -1,5 +1,5 @@
 from pydantic import BaseModel, ConfigDict
-from typing import List
+from typing import List, Callable, Dict
 
 class _retrieve_question_(BaseModel):
     model_config = ConfigDict(extra="forbid")
@@ -13,3 +13,4 @@ class _retrieve_statement_(BaseModel):
     Type: str
     Entities: List[str]
     Relationship: List[str]
+

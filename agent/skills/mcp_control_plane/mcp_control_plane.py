@@ -2,7 +2,7 @@ import requests
 from typing import Dict, TypedDict, Callable, Any, List
 from pydantic import BaseModel, ConfigDict
 from ._internal import  _retrieve_question_, _retrieve_statement_
-__all__ = ["FuncRetrieveArgs", "FuncRetrieveArgs_Hint", "FuncRetrieveArgs_Usage_Prompt"]
+__all__ = ["FuncRetrieveArgs", "FuncRetrieveArgs_Hint", "FuncRetrieveArgs_Usage_Prompt", "retrieve"]
 
 CONTROL_PLANE_URL = "http://localhost:8000"
 

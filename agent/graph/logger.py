@@ -2,10 +2,10 @@ from functools import wraps
 from pathlib import Path
 import os
 from datetime import datetime
-from agent_state import AgentState, SkillSubGraphState
-_SKILL_LOG_FOLDER = Path(os.path.dirname(__file__)) / "logs" / "skill"
-_GRAPH_LOG_FOLDER = Path(os.path.dirname(__file__)) / "logs" / "graph"
-_CONVERSATION_LOG_FOLDER = Path(os.path.dirname(__file__)) / "logs" / "conversation"
+from agent.graph.agent_state import AgentState, SkillSubGraphState
+_SKILL_LOG_FOLDER = Path(os.path.dirname(__file__)).parent / "logs" / "skill"
+_GRAPH_LOG_FOLDER = Path(os.path.dirname(__file__)).parent / "logs" / "graph"
+_CONVERSATION_LOG_FOLDER = Path(os.path.dirname(__file__)).parent / "logs" / "conversation"
 def _init_logs_folder():
     if not os.path.exists(_SKILL_LOG_FOLDER):
         os.mkdir(_SKILL_LOG_FOLDER)
@@ -13,8 +13,30 @@ def _init_logs_folder():
         os.mkdir(_GRAPH_LOG_FOLDER)
     if not os.path.exists(_CONVERSATION_LOG_FOLDER):
         os.mkdir(_CONVERSATION_LOG_FOLDER)
-
 _init_logs_folder()
+
+
+class Logging:
+    __slots__ = ["_conversation_key", "_skill_logger", "_graph_logger"]
+    def __init__(self):
+        self._conversation_key = ""
+        self._skill_logger = None
+        self._graph_logger = None
+
+    def set_conversation_key(self, conversation_key:str):
+        self._conversation_key = conversation_key
+        self._skill_logger = SkillLog(conversation_key=conversation_key)
+        self._graph_logger = GraphLog(conversation_key=conversation_key)
+
+    def get_conversation_key(self):
+        return self._conversation_key
+    def get_skill_logger(self):
+        return self._skill_logger
+
+    def get_graph_logger(self):
+        return self._graph_logger
+
+Logger = Logging()
 
 class SkillLog:
     def __init__(self, conversation_key:str):
@@ -87,25 +109,25 @@ class GraphLog:
             </GRAPH_[{graph_name}]_LOG>
             """)
 
-def skill_log(log: SkillLog):
+def skill_log(log: Logging):
     def skill_wrapper(func):
         @wraps(func)
         def wrapper(**arguments):
-            log.pre_skill_log(func.__name__, **arguments)
+            log.get_skill_logger().pre_skill_log(func.__name__, **arguments)
             output = func(**arguments)
-            log.post_skill_log(output)
+            log.get_skill_logger().post_skill_log(output)
             return output
         return wrapper
     return skill_wrapper
 
 
-def graph_log(log: GraphLog, graph_name:str = "main"):
+def graph_log(log: Logging, graph_name:str = "main"):
     def node_wrapper(func):
         @wraps(func)
         def wrapper(state: AgentState|SkillSubGraphState):
-            log.pre_node_log(func.__name__, state, graph_name)
+            log.get_graph_logger().pre_node_log(func.__name__, state, graph_name)
             output = func(state)
-            log.post_node_log(output, graph_name)
+            log.get_graph_logger().post_node_log(output, graph_name)
             return output
         return wrapper
     return node_wrapper
