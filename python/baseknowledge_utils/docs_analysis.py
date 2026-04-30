@@ -1,9 +1,8 @@
 import os
 import PyPDF2
-import ollama
 from fastapi import FastAPI, HTTPException
-from python.basestruct.base_model import OLLAMA_MODEL
 from python.basestruct.agent_prompt import OllamaPrompt
+from ollama_model import store_prompt, run_by_key, fetch_response
 from python.basestruct.base import SummaryEntry
 
 
@@ -12,8 +11,9 @@ def _summarize(text: str, page_index: int) -> str:
         return "(empty page)"
     prompt = OllamaPrompt.get__docs_analysis__summraize_prompt(str(page_index), text)
     try:
-        resp = ollama.generate(model=OLLAMA_MODEL, prompt=prompt)
-        return resp["response"].strip()
+        key = store_prompt(prompt)
+        run_by_key(key)
+        return fetch_response(key).strip()
     except Exception as e:
         return f"(summary failed: {e})"
 

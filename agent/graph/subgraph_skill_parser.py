@@ -1,20 +1,16 @@
-import ollama
 import json
 import uuid
 from datetime import datetime
 from agent.graph.agent_state import SkillSubGraphState, ResponseStatus
 from agent.graph.logger import graph_log, Logger
 from agent.skills.skill_registry import SKILL_REGISTRY
+from ollama_model import store_prompt, run_by_key, fetch_response
 
 
 def _generate_conversation_key():
     key = f"{uuid.uuid4()}_{str(datetime.now().strftime("%Y%m%d_%H%M%S_%f"))}"
     key = key.replace("-", "_")
     return key
-
-
-
-OLLAMA_MODEl = "llama3"
 
 
 key = _generate_conversation_key()
@@ -40,11 +36,9 @@ class SubGraphSkillArgParser:
             {SKILL_REGISTRY.get_skill(state["skill_name"]).usage_prompt}
         """
 
-        response = ollama.generate(
-            model=OLLAMA_MODEl,
-            prompt=prompt
-        )
-        state["skill_response"] = response.response
+        key = store_prompt(prompt)
+        run_by_key(key)
+        state["skill_response"] = fetch_response(key)
         return state
 
     @graph_log(Logger, "skill_usage_subgraph")
@@ -73,11 +67,9 @@ class SubGraphSkillArgParser:
             Right Format:
             {SKILL_REGISTRY.get_skill(state["skill_name"]).arg_hint}
         """
-        response = ollama.generate(
-            model=OLLAMA_MODEl,
-            prompt=prompt,
-        )
-        state["skill_response"] = response.response
+        key = store_prompt(prompt)
+        run_by_key(key)
+        state["skill_response"] = fetch_response(key)
         return state
 
     def skill_router(state: SkillSubGraphState) -> ResponseStatus:

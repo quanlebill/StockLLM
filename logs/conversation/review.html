@@ -45,11 +45,21 @@
     #btn-success { background: #2e7d32; color: #fff; }
     #btn-fail    { background: #b71c1c; color: #fff; }
     #btn-refresh { background: #333; color: #ccc; }
+    #btn-open    { background: #1565c0; color: #fff; }
 
-    /* Content area — scrollable to accommodate many blocks */
+    /* Content area */
     #content-area { flex: 1; min-height: 0; overflow-y: auto; padding: 20px; }
 
     .placeholder { color: #444; font-size: 14px; margin-top: 80px; text-align: center; }
+
+    /* Open folder prompt overlay */
+    #open-overlay {
+      position: absolute; inset: 0; background: #0f0f0f;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 16px; z-index: 10;
+    }
+    #open-overlay p { color: #666; font-size: 13px; max-width: 340px; text-align: center; line-height: 1.6; }
+    #open-overlay .hint { color: #444; font-size: 11px; }
 
     /* Conversation block */
     .conv-block { border: 1px solid #2a2a2a; border-radius: 6px; overflow: visible; margin-bottom: 20px; }
@@ -65,7 +75,6 @@
     .block-section { border-bottom: 1px solid #1e1e1e; }
     .block-section:last-child { border-bottom: none; }
 
-    /* Collapsible section header row */
     .section-toggle {
       display: flex; align-items: center; gap: 8px;
       padding: 8px 14px; cursor: pointer; user-select: none;
@@ -84,7 +93,6 @@
     .toggle-arrow { font-size: 10px; color: #555; transition: transform 0.15s; }
     .toggle-arrow.open { transform: rotate(90deg); }
 
-    /* Collapsible body */
     .section-body-wrap { display: none; padding: 0 14px 12px 14px; }
     .section-body-wrap.open { display: block; }
 
@@ -95,7 +103,6 @@
     .section-body.user-text   { color: #ce9178; }
     .section-body.answer-text { color: #9cdcfe; }
 
-    /* Workflow syntax highlighting */
     .wf-skill-start { color: #569cd6; font-weight: bold; }
     .wf-success     { color: #4caf50; }
     .wf-failed      { color: #f44336; }
@@ -122,9 +129,18 @@
 </head>
 <body>
 
+<!-- Open folder overlay (shown until folder is picked) -->
+<div id="open-overlay">
+  <button id="btn-open" onclick="openFolder()" style="padding:12px 28px; font-size:15px;">
+    Open logs/conversation Folder
+  </button>
+  <p>Select the <code>logs/conversation</code> folder so this page can read and write files directly — no server needed.</p>
+  <p class="hint">Requires Chrome or Edge. Firefox is not supported.</p>
+</div>
+
 <div id="sidebar">
   <h2>Awaiting Review</h2>
-  <div id="key-list"><div id="empty-msg">Loading...</div></div>
+  <div id="key-list"><div id="empty-msg">Open a folder to begin.</div></div>
 </div>
 
 <div id="main">
@@ -134,46 +150,73 @@
       <div id="conv-date"></div>
     </div>
     <button id="btn-refresh" onclick="loadList()">Refresh</button>
-    <button id="btn-success" disabled onclick="rate('success')">✓ Success</button>
-    <button id="btn-fail"    disabled onclick="rate('fail')">✗ Fail</button>
+    <button id="btn-success" disabled onclick="rate('success')">&#10003; Success</button>
+    <button id="btn-fail"    disabled onclick="rate('fail')">&#10007; Fail</button>
   </div>
 
   <div id="content-area">
-    <div class="placeholder">← Select a conversation from the sidebar</div>
+    <div class="placeholder">&#8592; Select a conversation from the sidebar</div>
   </div>
 
   <div id="status-bar">Ready</div>
 </div>
 
 <script>
-  const API = 'http://localhost:8000';
-  let selectedKey = null;
+  // ---------------------------------------------------------------------------
+  // State
+  // ---------------------------------------------------------------------------
+  let rootDir      = null;   // FileSystemDirectoryHandle for logs/conversation
+  let awaitingDir  = null;   // FileSystemDirectoryHandle for awaiting/
+  let selectedKey  = null;   // filename without .json
+  let loadedData   = null;   // parsed JSON of current conversation
 
   // ---------------------------------------------------------------------------
-  // Sidebar
+  // Open folder
+  // ---------------------------------------------------------------------------
+
+  async function openFolder() {
+    try {
+      rootDir = await window.showDirectoryPicker({ mode: 'readwrite' });
+      awaitingDir = await rootDir.getDirectoryHandle('awaiting', { create: false });
+      document.getElementById('open-overlay').style.display = 'none';
+      await loadList();
+    } catch (e) {
+      if (e.name !== 'AbortError') setStatus('Error opening folder: ' + e.message);
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Sidebar — list awaiting JSON files
   // ---------------------------------------------------------------------------
 
   async function loadList() {
+    if (!awaitingDir) return;
     setStatus('Loading list...');
-    try {
-      const res  = await fetch(`${API}/review/list`);
-      const data = await res.json();
-      const list = document.getElementById('key-list');
-      list.innerHTML = '';
-      if (!data.awaiting.length) {
-        list.innerHTML = '<div id="empty-msg">No conversations awaiting review.</div>';
-        setStatus('No awaiting conversations.');
-        return;
+    const list = document.getElementById('key-list');
+    list.innerHTML = '';
+
+    const keys = [];
+    for await (const [name, handle] of awaitingDir.entries()) {
+      if (handle.kind === 'file' && name.endsWith('.json')) {
+        keys.push(name.replace(/\.json$/, ''));
       }
-      data.awaiting.forEach(key => {
-        const div = document.createElement('div');
-        div.className = 'key-item' + (key === selectedKey ? ' active' : '');
-        div.textContent = key;
-        div.onclick = () => loadContent(key);
-        list.appendChild(div);
-      });
-      setStatus(`${data.awaiting.length} conversation(s) awaiting review.`);
-    } catch (e) { setStatus('Error: ' + e.message); }
+    }
+    keys.sort();
+
+    if (!keys.length) {
+      list.innerHTML = '<div id="empty-msg">No conversations awaiting review.</div>';
+      setStatus('No awaiting conversations.');
+      return;
+    }
+
+    keys.forEach(key => {
+      const div = document.createElement('div');
+      div.className = 'key-item' + (key === selectedKey ? ' active' : '');
+      div.textContent = key;
+      div.onclick = () => loadContent(key);
+      list.appendChild(div);
+    });
+    setStatus(`${keys.length} conversation(s) awaiting review.`);
   }
 
   // ---------------------------------------------------------------------------
@@ -191,17 +234,21 @@
     setStatus('Loading content...');
 
     try {
-      const res  = await fetch(`${API}/review/content/${encodeURIComponent(key)}`);
-      const data = await res.json();
-      document.getElementById('conv-date').textContent = data.conversation_date || '';
-      document.getElementById('content-area').innerHTML = '';
-      (data.conversation_block || []).forEach((block, idx) => {
-        document.getElementById('content-area').appendChild(renderBlock(block, idx, key));
+      const fileHandle = await awaitingDir.getFileHandle(key + '.json');
+      const file       = await fileHandle.getFile();
+      const text       = await file.text();
+      loadedData       = JSON.parse(text);
+
+      document.getElementById('conv-date').textContent = loadedData.conversation_date || '';
+      const area = document.getElementById('content-area');
+      area.innerHTML = '';
+      (loadedData.conversation_block || []).forEach((block, idx) => {
+        area.appendChild(renderBlock(block, idx));
       });
       setStatus('Loaded: ' + key);
     } catch (e) {
       document.getElementById('content-area').innerHTML =
-        `<div class="placeholder">Error loading: ${e.message}</div>`;
+        `<div class="placeholder">Error loading: ${escHtml(e.message)}</div>`;
       setStatus('Error: ' + e.message);
     }
   }
@@ -210,34 +257,25 @@
   // Block renderer
   // ---------------------------------------------------------------------------
 
-  function renderBlock(block, idx, key) {
+  function renderBlock(block, idx) {
     const wrap = document.createElement('div');
     wrap.className = 'conv-block';
 
-    // Header
     const hdr = document.createElement('div');
     hdr.className = 'block-header';
     hdr.innerHTML = `<strong>Block ${idx + 1}</strong><span></span>`;
     wrap.appendChild(hdr);
 
-    // USER — starts expanded (usually short)
-    wrap.appendChild(makeCollapsible('User', 'label-user', escHtml(block.user || ''), 'user-text', true));
-
-    // WORKFLOW — starts collapsed
+    wrap.appendChild(makeCollapsible('User',     'label-user',    escHtml(block.user     || ''), 'user-text',   true));
     wrap.appendChild(makeWorkflowSection(block.workflow || ''));
-
-    // ANSWER — starts collapsed (can be long)
-    wrap.appendChild(makeCollapsible('Answer', 'label-answer', escHtml(block.answer || ''), 'answer-text', false));
-
-    // COMMENT — always visible, shows existing + input for new text
-    wrap.appendChild(makeCommentSection(block, idx, key));
+    wrap.appendChild(makeCollapsible('Answer',   'label-answer',  escHtml(block.answer   || ''), 'answer-text', false));
+    wrap.appendChild(makeCommentSection(block, idx));
 
     return wrap;
   }
 
-  // Generic collapsible section
   function makeCollapsible(label, labelClass, html, bodyClass, startOpen) {
-    const sec = document.createElement('div');
+    const sec    = document.createElement('div');
     sec.className = 'block-section';
 
     const toggle = document.createElement('div');
@@ -268,9 +306,8 @@
     return sec;
   }
 
-  // Workflow collapsible with syntax highlighting
   function makeWorkflowSection(workflowText) {
-    const sec = document.createElement('div');
+    const sec    = document.createElement('div');
     sec.className = 'block-section';
 
     const toggle = document.createElement('div');
@@ -301,12 +338,10 @@
     return sec;
   }
 
-  // Comment section: single editable textarea, pre-filled with existing comment
-  function makeCommentSection(block, idx, key) {
-    const sec = document.createElement('div');
+  function makeCommentSection(block, idx) {
+    const sec    = document.createElement('div');
     sec.className = 'block-section';
 
-    // Header row (non-collapsible)
     const hdrRow = document.createElement('div');
     hdrRow.className = 'section-toggle';
     hdrRow.style.cursor = 'default';
@@ -316,10 +351,9 @@
     hdrRow.appendChild(lbl);
     sec.appendChild(hdrRow);
 
-    const body = document.createElement('div');
+    const body  = document.createElement('div');
     body.className = 'comment-section';
 
-    // Single textarea — pre-filled with existing comment so user can view and edit
     const input = document.createElement('textarea');
     input.className = 'comment-input';
     input.dataset.blockIndex = idx;
@@ -327,28 +361,24 @@
     input.value = block.comment || '';
     body.appendChild(input);
 
-    // Footer: Save button + status
-    const footer = document.createElement('div');
+    const footer    = document.createElement('div');
     footer.className = 'comment-footer';
-    const btn = document.createElement('button');
-    btn.className = 'btn-comment';
+    const btn       = document.createElement('button');
+    btn.className   = 'btn-comment';
     btn.textContent = 'Save';
     const savedSpan = document.createElement('span');
     savedSpan.className = 'comment-saved';
 
     btn.onclick = async () => {
       const text = input.value.trim();
-      if (!text) return;
       try {
-        await fetch(`${API}/conversation/log-comment`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ conversation_key: key, comment: text, block_index: idx }),
-        });
+        await saveComment(idx, text);
         block.comment = text;
         savedSpan.textContent = '✓ Saved';
         setTimeout(() => { savedSpan.textContent = ''; }, 2000);
-      } catch (e) { savedSpan.textContent = 'Error'; }
+      } catch (e) {
+        savedSpan.textContent = 'Error: ' + e.message;
+      }
     };
 
     footer.appendChild(btn);
@@ -356,6 +386,71 @@
     body.appendChild(footer);
     sec.appendChild(body);
     return sec;
+  }
+
+  // ---------------------------------------------------------------------------
+  // Save comment — writes updated JSON back to awaiting/<key>.json
+  // ---------------------------------------------------------------------------
+
+  async function saveComment(blockIndex, text) {
+    if (!loadedData || !selectedKey) throw new Error('No file loaded');
+    loadedData.conversation_block[blockIndex].comment = text;
+    await writeJson(awaitingDir, selectedKey + '.json', loadedData);
+  }
+
+  // ---------------------------------------------------------------------------
+  // Rate — flush all comment inputs, then move file to success/ or fail/
+  // ---------------------------------------------------------------------------
+
+  async function rate(rating) {
+    if (!selectedKey || !loadedData) return;
+    document.getElementById('btn-success').disabled = true;
+    document.getElementById('btn-fail').disabled    = true;
+
+    // Flush all comment textareas into loadedData
+    document.querySelectorAll('.comment-input').forEach(input => {
+      const idx  = parseInt(input.dataset.blockIndex, 10);
+      const text = input.value.trim();
+      if (loadedData.conversation_block[idx] !== undefined) {
+        loadedData.conversation_block[idx].comment = text;
+      }
+    });
+
+    setStatus(`Moving '${selectedKey}' to ${rating}...`);
+    try {
+      // Get or create target directory
+      const targetDir = await rootDir.getDirectoryHandle(rating, { create: true });
+
+      // Write file to target directory
+      await writeJson(targetDir, selectedKey + '.json', loadedData);
+
+      // Delete from awaiting
+      await awaitingDir.removeEntry(selectedKey + '.json');
+
+      setStatus(`Moved '${selectedKey}' to ${rating}.`);
+      selectedKey = null;
+      loadedData  = null;
+      document.getElementById('current-key').textContent = 'Select a conversation';
+      document.getElementById('conv-date').textContent   = '';
+      document.getElementById('content-area').innerHTML  =
+        `<div class="placeholder">Rated! Select another conversation.</div>`;
+      await loadList();
+    } catch (e) {
+      setStatus('Error: ' + e.message);
+      document.getElementById('btn-success').disabled = false;
+      document.getElementById('btn-fail').disabled    = false;
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Helpers
+  // ---------------------------------------------------------------------------
+
+  async function writeJson(dirHandle, filename, data) {
+    const fileHandle   = await dirHandle.getFileHandle(filename, { create: true });
+    const writable     = await fileHandle.createWritable();
+    await writable.write(JSON.stringify(data, null, 2));
+    await writable.close();
   }
 
   function highlightWorkflow(text) {
@@ -372,73 +467,15 @@
   }
 
   function escHtml(str) {
-    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-  }
-
-  // ---------------------------------------------------------------------------
-  // Rate — saves any pending comments first, then moves the file
-  // ---------------------------------------------------------------------------
-
-  async function rate(rating) {
-    if (!selectedKey) return;
-    document.getElementById('btn-success').disabled = true;
-    document.getElementById('btn-fail').disabled    = true;
-
-    // Collect non-empty comment inputs
-    const commentInputs = document.querySelectorAll('.comment-input');
-    const pendingSaves = [];
-    commentInputs.forEach(input => {
-      const text = input.value.trim();
-      if (text) {
-        pendingSaves.push({ idx: parseInt(input.dataset.blockIndex, 10), text });
-      }
-    });
-
-    if (pendingSaves.length) {
-      setStatus(`Saving ${pendingSaves.length} comment(s) before rating...`);
-      try {
-        await Promise.all(pendingSaves.map(({ idx, text }) =>
-          fetch(`${API}/conversation/log-comment`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ conversation_key: selectedKey, comment: text, block_index: idx }),
-          })
-        ));
-      } catch (e) {
-        setStatus('Error saving comments: ' + e.message);
-        document.getElementById('btn-success').disabled = false;
-        document.getElementById('btn-fail').disabled    = false;
-        return;
-      }
-    }
-
-    setStatus(`Moving '${selectedKey}' to ${rating}...`);
-    try {
-      await fetch(`${API}/review/rate`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ key: selectedKey, rating }),
-      });
-      setStatus(`Moved '${selectedKey}' to ${rating}.`);
-      selectedKey = null;
-      document.getElementById('current-key').textContent = 'Select a conversation';
-      document.getElementById('conv-date').textContent   = '';
-      document.getElementById('content-area').innerHTML  =
-        '<div class="placeholder">Rated! Select another conversation.</div>';
-      await loadList();
-    } catch (e) {
-      setStatus('Error: ' + e.message);
-      document.getElementById('btn-success').disabled = false;
-      document.getElementById('btn-fail').disabled    = false;
-    }
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
   }
 
   function setStatus(msg) {
     document.getElementById('status-bar').textContent = msg;
   }
-
-  // Init
-  loadList();
 </script>
 </body>
 </html>

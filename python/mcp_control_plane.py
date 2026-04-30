@@ -47,6 +47,8 @@ ROOT     = os.environ.get("STOCKLLM_ROOT") or str(Path(__file__).resolve().paren
 ENV_PATH = os.path.join(ROOT, ".env")
 
 mcp = FastMCP("control-plane")
+RETRIEVE_CACHE = {}
+
 
 # Pre-warm the SentenceTransformer model at startup so cache_lookup Stage 2
 # doesn't incur a 30–90s cold load on the first question.
@@ -620,6 +622,13 @@ def kg_build() -> dict:
     return _kg("POST", "/kg/build")
 
 
+@mcp.tool()
+def cache_retrieve(queries) -> dict:
+    cache_result = requests.post(f"{CONTROL_PLANE_URL}/get_cache_query", json=queries, timeout=180)
+    cache_result.raise_for_status()
+    cache_result = cache_result.json()
+    _log_step("cache_retrieve", {"queries": queries}, cache_result)
+    return cache_result
 # ---------------------------------------------------------------------------
 # Retrieval pipeline tool  (replaces multiple individual skill calls)
 # Merged into control_plane.py (port 8000) — no separate service needed.

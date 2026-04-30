@@ -60,13 +60,12 @@ StockLLM is a Python project (configured via PyCharm/IntelliJ with a virtual env
 - Every subsequent tool call is automatically logged to the workflow from this point on
 
 **Step 4 — Retrieve (single call)**
-- Call `retrieve(queries=[...])` with the formatted query strings from Step 2
+- Call `cache_retrieve(queries=[...])` with the formatted query strings from Step 2
+- Based on the cached answer, modified the queries to gain missing information
+- If the cached answer already have all required information move to Step 5, else continue
+- Call `retrieve(queries=[...])` with the modified query
 - The pipeline internally handles: lowercase → parse → entity canonicalization → cache lookup + LightRAG (concurrently)
-- For each result in the response:
-  - `cache.hit == "answer"` → a cached answer is ready in `combined`; use it immediately
-  - `cache.hit == "miss"` → use `combined` (retrieval summary) to compose the answer
-  - `error == "format_error"` → reformat that query string per the `message` hint and retry
-- **If the retrieval pipeline is unavailable** → fall back to `invoke_skill` / `invoke_skills` as before
+- If the result contains `error == "format_error"` → reformat that query string per the `message` hint and retry
 - Compose your answer from the `combined` field of each result
 
 **Step 5 — Finalize**

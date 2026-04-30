@@ -241,5 +241,7 @@
   "delta and strike selection": "delta_and_strike_selection",
   "rrg chart": "rrg_chart",
   "spx": "spx",
-  "stock scanning and filtering": "stock_scanning_and_filtering"
+  "stock scanning and filtering": "stock_scanning_and_filtering",
+  "earnings": "corporate_earnings",
+  "market sentiment": "market_sentiment"
 }

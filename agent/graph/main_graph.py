@@ -1,9 +1,6 @@
-import ollama
-
 from agent.graph.agent_state import AgentState, SkillSubGraphState
 from agent.graph.logger import graph_log, Logger
-
-OLLAMA_MODEl = "llama3"
+from ollama_model import store_prompt, run_by_key, fetch_response
 
 @graph_log(Logger, "main_agent_graph")
 def user_query(state: AgentState) -> AgentState:
@@ -30,11 +27,9 @@ def enhance_query(state: AgentState) -> AgentState:
     - How does these factor affect GDP
     ```
     """
-    response = ollama.generate(
-        model=OLLAMA_MODEl,
-        prompt=prompt,
-    )
-    state["enhance_query"] = response.response
+    key = store_prompt(prompt)
+    run_by_key(key)
+    state["enhance_query"] = fetch_response(key)
     return state
 
 

@@ -8,7 +8,6 @@ from dotenv import load_dotenv
 ROOT = Path(os.environ["STOCKLLM_ROOT"])
 load_dotenv(ROOT / ".env")
 
-import ollama
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from neo4j import GraphDatabase
@@ -16,7 +15,7 @@ from typing import Dict, List, Tuple, Any
 from python.basestruct.neo4j_relationship import DocumentRel
 from python.basestruct.base import EntityProperties, AddEntitiesRequest, AddRelationshipRequest, BuildGraphRequest
 from python.basestruct.agent_prompt import OllamaPrompt
-from python.basestruct.base_model import OLLAMA_MODEL
+from ollama_model import store_prompt, run_by_key, fetch_response
 
 LOCAL_DIR  = ROOT / "baseknowledge" / "local"
 LOCAL_JSON = LOCAL_DIR / "knowledge_graph.json"
@@ -158,8 +157,9 @@ def build_graph(request: BuildGraphRequest):
     prompt = OllamaPrompt.get__storing__build_graph_prompt(request.book_name, content)
 
     try:
-        resp = ollama.generate(model=OLLAMA_MODEL, prompt=prompt, format="json")
-        raw = resp["response"]
+        key = store_prompt(prompt, fmt="json")
+        run_by_key(key)
+        raw = fetch_response(key)
     except Exception as e:
         raise HTTPException(status_code=502, detail=f"Ollama3 request failed: {e}")
 

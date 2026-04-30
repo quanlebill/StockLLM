@@ -41,7 +41,6 @@ import json
 import os
 import shutil
 import uuid
-import ollama
 from datetime import datetime, timezone
 from typing import Optional
 
@@ -60,7 +59,7 @@ import entity_resolver
 from python.basestruct.neo4j_relationship import PolicyRel, EntityRel
 from python.basestruct.base import EntityInput, PolicyInput, RelationshipInput, NoteInput, ExtractRequest
 from python.basestruct.agent_prompt import OllamaPrompt
-from python.basestruct.base_model import OLLAMA_MODEL
+from ollama_model import store_prompt, run_by_key, fetch_response
 
 # ---------------------------------------------------------------------------
 # Config
@@ -511,8 +510,9 @@ def _ollama_preprocess(user: str, answer: str, comment: str) -> dict:
     prompt = OllamaPrompt.get__self_improvement__ollama_preprocess_prompt(user, answer, comment)
 
     try:
-        resp = ollama.generate(model=OLLAMA_MODEL, prompt=prompt, format="json")
-        parsed = json.loads(resp["response"])
+        key = store_prompt(prompt, fmt="json")
+        run_by_key(key)
+        parsed = json.loads(fetch_response(key))
         return {
             "fixed_answer": parsed.get("fixed_answer", answer),
             "key_info": parsed.get("key_info", ""),

@@ -21,7 +21,6 @@ import re
 from pathlib import Path
 import uvicorn
 
-import ollama
 import PyPDF2
 import requests as _requests
 from dotenv import load_dotenv
@@ -31,7 +30,7 @@ from neo4j import GraphDatabase
 
 from python.basestruct.base import LoadPagesRequest, LoadPagesByPathsRequest, RetrieveRequest
 from python.basestruct.agent_prompt import OllamaPrompt
-from python.basestruct.base_model import OLLAMA_MODEL
+from ollama_model import store_prompt, run_by_key, fetch_response
 
 import entity_resolver
 from cache_query import cache_lookup, embed
@@ -55,7 +54,8 @@ driver = GraphDatabase.driver(NEO4J_URI, auth=(NEO4J_USER, NEO4J_PASSWORD))
 
 def prewarm_ollama() -> None:
     try:
-        ollama.generate(model=OLLAMA_MODEL, prompt="warm up", options={"num_predict": 1})
+        key = store_prompt("warm up", options={"num_predict": 1})
+        run_by_key(key)
     except Exception:
         pass  # non-fatal — Ollama may not be running yet
 
@@ -341,8 +341,9 @@ def _keypoints(pages_text: str, topic: str, page_range: str) -> str:
     prompt = OllamaPrompt.get__retrieval_pipeline__keypoint_prompt(page_range, topic, pages_text)
 
     try:
-        resp = ollama.generate(model=OLLAMA_MODEL, prompt=prompt)
-        return resp["response"].strip()
+        key = store_prompt(prompt)
+        run_by_key(key)
+        return fetch_response(key).strip()
     except Exception as e:
         return f"(Ollama failed: {e})"
 
@@ -686,7 +687,45 @@ async def _lightrag_query(entities: list[str], relationship: str, direction: str
     }
 
 
-# Per-query processor
+
+## Per-query processor ##
+# per-query cache
+async def _cache_lookup_single_query(raw_query:str, idx: int) -> dict:
+    lowercased = raw_query.lower()
+
+    try:
+        parsed = _parse_query_string(lowercased)
+    except ParseError as e:
+        return {
+            "query_index": idx,
+            "raw_query": raw_query,
+            "error": "format_error",
+            "message": str(e),
+            "combined": "",
+        }
+
+    canonical_entities, entity_map = _canonicalize_entities(parsed["entities_raw"])
+
+    canonical, query_hash = _build_canonical(
+        parsed["type"],
+        parsed["question_type"],
+        canonical_entities,
+        parsed["relationship"],
+    )
+
+    cache_result = cache_lookup(canonical, query_hash)
+
+    if isinstance(cache_result, Exception):
+        cache_result = {"hit": "miss", "error": str(cache_result)}
+
+    return {
+        "query_index": idx,
+        "raw_query": raw_query,
+        "cache_result": cache_result,
+    }
+
+
+# per-query light graph
 async def _process_single_query(raw_query: str, idx: int) -> dict:
     lowercased = raw_query.lower()
 
@@ -713,18 +752,12 @@ async def _process_single_query(raw_query: str, idx: int) -> dict:
     cache_task = asyncio.to_thread(cache_lookup, canonical, query_hash)
     lightrag_task = _lightrag_query(canonical_entities, parsed["relationship"], parsed["direction"])
 
-    cache_result, retrieval_result = await asyncio.gather(
-        cache_task, lightrag_task, return_exceptions=True
-    )
+    retrieval_result = await lightrag_task,
 
-    if isinstance(cache_result, Exception):
-        cache_result = {"hit": "miss", "error": str(cache_result)}
     if isinstance(retrieval_result, Exception):
         retrieval_result = {"kg_results": {}, "doc_results": [], "neighbors": [], "keypoints": "", "summary": ""}
-
     combined_parts: list[str] = []
-    if cache_result.get("hit") == "answer":
-        combined_parts.append(f"[CACHE HIT — answer ready]\n{cache_result.get('answer', '')}")
+
     if retrieval_result.get("summary"):
         combined_parts.append(f"[RETRIEVAL]\n{retrieval_result['summary']}")
 
@@ -742,7 +775,6 @@ async def _process_single_query(raw_query: str, idx: int) -> dict:
         },
         "canonical": canonical,
         "hash": query_hash,
-        "cache": cache_result,
         "retrieval": retrieval_result,
         "combined": "\n\n".join(combined_parts),
     }
@@ -808,6 +840,17 @@ async def retrieve(request: RetrieveRequest) -> dict:
     results = await asyncio.gather(*tasks)
     return {"results": list(results)}
 
+
+@router.post("/get_cache_query")
+async def get_cache_query(request: RetrieveRequest) -> dict:
+    try:
+        pipe_strings = _dict_to_pipe_strings(request.queries)
+    except ParseError as e:
+        return {"results": [{"query_index": 0, "error": "format_error", "message": str(e), "combined": ""}]}
+
+    tasks = [_cache_lookup_single_query(q, i) for i, q in enumerate(pipe_strings)]
+    results = await asyncio.gather(*tasks)
+    return {"results": list(results)}
 
 @router.get("/health")
 def health():

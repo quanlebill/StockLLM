@@ -34,14 +34,15 @@ def main():
     print("\nStarting StockLLM services...\n")
 
     services = [
-        ("control_plane    [8000]", os.path.join(PY, "control_plane.py")),
-        ("storing          [8002]", os.path.join(BK_UTILS, "storing.py")),
-        ("chunking         [8004]", os.path.join(BK_UTILS, "chunking.py")),
-        ("local_graph      [8005]", os.path.join(BK, "local", "local_graph.py")),
-        ("cache_maintenance      ", os.path.join(PY, "cache_maintenance.py")),
+        ("ollama_model      [8008]", os.path.join(PY, "ollama_model.py")),
+        ("control_plane     [8000]", os.path.join(PY, "control_plane.py")),
+        ("storing           [8002]", os.path.join(BK_UTILS, "storing.py")),
+        ("chunking          [8004]", os.path.join(BK_UTILS, "chunking.py")),
+        ("local_graph       [8005]", os.path.join(BK, "local", "local_graph.py")),
+        ("cache_maintenance       ", os.path.join(PY, "cache_maintenance.py")),
     ]
 
-    services.append(("docs_analysis     [8001]", os.path.join(BK_UTILS, "docs_analysis.py")))
+    services.append(("docs_analysis      [8001]", os.path.join(BK_UTILS, "docs_analysis.py")))
 
     for label, path in services:
         proc = _start(label, path)
