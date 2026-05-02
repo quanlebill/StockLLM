@@ -623,8 +623,11 @@ def kg_build() -> dict:
 
 
 @mcp.tool()
-def cache_retrieve(queries) -> dict:
-    cache_result = requests.post(f"{CONTROL_PLANE_URL}/get_cache_query", json=queries, timeout=180)
+def cache_retrieve(queries: dict) -> dict:
+    if isinstance(queries, str):
+        import json as _json
+        queries = _json.loads(queries)
+    cache_result = requests.post(f"{CONTROL_PLANE_URL}/get_cache_query", json={"queries": queries}, timeout=180)
     cache_result.raise_for_status()
     cache_result = cache_result.json()
     _log_step("cache_retrieve", {"queries": queries}, cache_result)

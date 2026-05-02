@@ -243,5 +243,7 @@
   "spx": "spx",
   "stock scanning and filtering": "stock_scanning_and_filtering",
   "earnings": "corporate_earnings",
-  "market sentiment": "market_sentiment"
+  "market sentiment": "market_sentiment",
+  "fed_fund_rate": "fed_fund_rate",
+  "tech stock": "tech_stocks"
 }

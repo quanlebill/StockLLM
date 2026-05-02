@@ -437,6 +437,17 @@ def search_policy_qdrant_ids(query_vector: list[float], top_k: int = 5) -> list[
     return [str(h.id) for h in hits]
 
 
+def delete_policy_qdrant_points(qdrant_ids: list[str]) -> int:
+    """Delete KG_NOTES policy points by their Qdrant UUIDs. Returns count deleted."""
+    if not qdrant_ids:
+        return 0
+    _qdrant_client().delete(
+        collection_name=NOTE_COLLECTION,
+        points_selector=qm.PointIdsList(points=qdrant_ids),
+    )
+    return len(qdrant_ids)
+
+
 def fetch_context_by_ids(qdrant_ids: list[str], query_vector: list[float], top_k: int = 5) -> list[dict]:
     """
     Similarity search within a pre-filtered set of Qdrant point IDs.

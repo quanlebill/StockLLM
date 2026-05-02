@@ -749,12 +749,9 @@ async def _process_single_query(raw_query: str, idx: int) -> dict:
         parsed["relationship"],
     )
 
-    cache_task = asyncio.to_thread(cache_lookup, canonical, query_hash)
-    lightrag_task = _lightrag_query(canonical_entities, parsed["relationship"], parsed["direction"])
-
-    retrieval_result = await lightrag_task,
-
-    if isinstance(retrieval_result, Exception):
+    try:
+        retrieval_result = await _lightrag_query(canonical_entities, parsed["relationship"], parsed["direction"])
+    except Exception:
         retrieval_result = {"kg_results": {}, "doc_results": [], "neighbors": [], "keypoints": "", "summary": ""}
     combined_parts: list[str] = []
 

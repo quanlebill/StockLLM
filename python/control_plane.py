@@ -11,7 +11,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 ROOT = os.environ["STOCKLLM_ROOT"]
 
-from cache_query import cache_store as _cache_store
+from cache_query import cache_store as _cache_store, cache_lookup as _cache_lookup
 from skill_registry import invoke_skill, REGISTRY, SKILLS_BY_CATEGORY
 import self_improvement as _kg_pipeline
 import retrieval_pipeline as _retrieval_pipeline
@@ -60,6 +60,11 @@ def _auto_cache(key: str, answer: str, canonical: str = "", query_hash: str = ""
     buf = _cache_buffer.pop(key, {})
     if not answer or not canonical or not query_hash:
         return
+    try:
+        if _cache_lookup(canonical, query_hash).get("hit") == "answer":
+            return
+    except Exception:
+        pass
     conv = _load_conversation(key)
     if not conv or not conv.get("conversation_block"):
         return

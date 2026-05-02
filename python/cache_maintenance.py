@@ -18,6 +18,7 @@ from dotenv import load_dotenv
 from neo4j import GraphDatabase
 
 import cache_query
+import self_improvement
 
 load_dotenv(Path(os.environ["STOCKLLM_ROOT"]) / ".env")
 
@@ -52,24 +53,38 @@ def _neo4j():
 
 def clean_old_policies() -> int:
     """
-    Delete Policy nodes in Neo4j whose created_at is older than 2 weeks.
-    Also detaches all edges (INVOLVES / AFFECTS) before deletion.
+    Delete Policy nodes in Neo4j whose created_at is older than 2 weeks,
+    then delete the corresponding Qdrant KG_NOTES points.
     Returns the number of policies deleted.
     """
     cutoff = (datetime.now(timezone.utc) - POLICY_MAX_AGE).isoformat()
     with _neo4j().session() as session:
+        # Collect qdrant_ids before deletion so we can clean Qdrant too
+        rows = session.run(
+            "MATCH (p:Policy) WHERE p.created_at < $cutoff RETURN p.qdrant_id AS qdrant_id",
+            cutoff=cutoff,
+        ).data()
+        qdrant_ids = [r["qdrant_id"] for r in rows if r.get("qdrant_id")]
+
         result = session.run(
             """
             MATCH (p:Policy)
             WHERE p.created_at < $cutoff
-            WITH p, p.id AS pol_id
             DETACH DELETE p
             RETURN count(*) AS deleted
             """,
             cutoff=cutoff,
         )
         record = result.single()
-        return record["deleted"] if record else 0
+        deleted = record["deleted"] if record else 0
+
+    if qdrant_ids:
+        try:
+            self_improvement.delete_policy_qdrant_points(qdrant_ids)
+        except Exception as e:
+            log.error(f"Qdrant policy point cleanup failed: {e}")
+
+    return deleted
 
 
 # ---------------------------------------------------------------------------
@@ -91,7 +106,7 @@ def run_once() -> None:
     # Neo4j policy cleanup
     try:
         deleted = clean_old_policies()
-        log.info(f"Neo4j  — deleted {deleted} stale Policy node(s) (older than 2 weeks)")
+        log.info(f"Neo4j + Qdrant — deleted {deleted} stale Policy node(s) (older than 2 weeks)")
     except Exception as e:
         log.error(f"Neo4j cleanup failed: {e}")
 

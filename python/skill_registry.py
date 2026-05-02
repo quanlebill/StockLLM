@@ -349,6 +349,23 @@ def skill_bk_add_relationship(**kwargs) -> Any:
         "to_entity":    kwargs["to_entity"],
     })
 
+def skill_yfinance_stock_analysis(**kwargs) -> dict:
+    ticker = kwargs.get("ticker")
+    if not ticker:
+        raise ValueError("'ticker' argument is required")
+    period = kwargs.get("period", "1y")
+    from skills.yfinance.stock_analysis import analyze
+    return analyze(ticker=ticker, period=period)
+
+
+def skill_yfinance_market_scan(**kwargs) -> dict:
+    from skills.yfinance.market_scan import scan
+    return scan(
+        top_n=int(kwargs.get("top_n", 10)),
+        period=kwargs.get("period", "1y"),
+    )
+
+
 def skill_retrieve(**kwargs) -> Any:
     if "queries" not in kwargs or not kwargs["queries"]:
         raise ValueError("retrieve requires argument: 'queries' (dict of structured query entries)")
@@ -379,6 +396,8 @@ REGISTRY: dict[str, Any] = {
     "country_iso_codes": skill_country_iso_codes,
     "snowflake_json_to_query": skill_snowflake_json_to_query,
     "finance_data_for_week": skill_finance_data_for_week,
+    "yfinance.stock_analysis": skill_yfinance_stock_analysis,
+    "yfinance.market_scan":    skill_yfinance_market_scan,
     "train_gradient_boosting": skill_train_gradient_boosting,
     "gradient_boosting_train": skill_gradient_boosting_train,
     "gradient_boosting_predict": skill_gradient_boosting_predict,
@@ -421,6 +440,11 @@ SKILLS_EXTRACTION: list[str] = [
     "worldometer_gdp_all_countries",
     "country_iso_codes",
     "finance_data_for_week",
+]
+
+SKILLS_YFINANCE: list[str] = [
+    "yfinance.stock_analysis",
+    "yfinance.market_scan",
 ]
 
 SKILLS_MODEL: list[str] = [
@@ -468,4 +492,5 @@ SKILLS_BY_CATEGORY: dict[str, list[str]] = {
     "model":      SKILLS_MODEL,
     "storing":    SKILLS_STORING,
     "retrieve":   SKILLS_RETRIEVE,
+    "yfinance":   SKILLS_YFINANCE,
 }
