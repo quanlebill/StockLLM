@@ -23,7 +23,7 @@ class SkillRegistry:
     def __init__(self):
         self.skill_list = {}
 
-    def add_skill(self, skill_name,skill: Skill) -> SkillAddFlag:
+    def add_skill(self, skill_name: str,skill: Skill) -> SkillAddFlag:
         if skill_name not in self.skill_list:
             self.skill_list[skill_name] = skill
             return SkillAddFlag.ADDED
@@ -31,6 +31,9 @@ class SkillRegistry:
 
     def get_skill(self, skill_name: str) -> Skill:
         return self.skill_list[skill_name]
+
+    def get_skills(self):
+        return self.skill_list.items()
 
 SKILL_REGISTRY = SkillRegistry()
 SKILL_REGISTRY.add_skill(
@@ -40,7 +43,17 @@ SKILL_REGISTRY.add_skill(
         usage_prompt=FuncRetrieveArgs_Usage_Prompt,
         arg_hint=FuncRetrieveArgs_Hint,
         description = """
-             Retrieve information for more details answer
+             Retrieve information for more details answer from base knowledge
         """
     )
 )
+
+def get_skill_list() -> str:
+    skill_list = ""
+    for skill_name, skill_details in SKILL_REGISTRY.get_skills():
+        skill_description = f"{skill_name}: {skill_details.description}"
+        skill_description.replace("\n", " ")
+        skill_list += f"{skill_name}: {skill_description}\n"
+
+    return skill_list
+

@@ -245,5 +245,20 @@
   "earnings": "corporate_earnings",
   "market sentiment": "market_sentiment",
   "fed_fund_rate": "fed_fund_rate",
-  "tech stock": "tech_stocks"
+  "tech stock": "tech_stocks",
+  "stock prices": "stock_price",
+  "macroeconomic indicators": "macroeconomic_indicators",
+  "interest rates": "real_interest_rate",
+  "unemployment rates": "unemployment_rates",
+  "stock market trends": "stock_market_trends",
+  "economic indicators": "macroeconomic_indicators",
+  "changes in a fear index": "fear_index",
+  "investor sentiment": "investor_sentiment",
+  "subsequent stock price movements": "subsequent_stock_price_movements",
+  "effects": "effects",
+  "people": "people",
+  "economy": "economy",
+  "gdp will increase": "gdp_will_increase",
+  "overall economy": "overall_economy",
+  "equity": "equity_market"
 }

@@ -458,7 +458,7 @@ class ParseError(ValueError):
 
 
 def _parse_query_string(raw: str) -> dict:
-    parts = [p.strip() for p in raw.split("|")]
+    parts = [p.strip().lower() for p in raw.split("|")]
 
     if not parts or parts[0] not in ("question", "statement"):
         raise ParseError(
@@ -490,8 +490,6 @@ def _parse_query_string(raw: str) -> dict:
         rel_str = parts[2]
 
     entities_raw = [e.strip() for e in entities_str.split(",") if e.strip()]
-    if not entities_raw:
-        raise ParseError(f"Entities segment is empty or invalid: '{entities_str}'. \n{_FORMAT_HINT}")
 
     rel_parts = rel_str.split("/")
     relationship = rel_parts[0].strip()
@@ -533,8 +531,8 @@ def _build_canonical(
         if qtype in {"what", "who", "when", "where", "how"}:
             qt = f"question:{qtype}"
 
-    sorted_ents = sorted(e.strip() for e in entities)
-    rel = re.sub(r"\s+", " ", relationship.strip())
+    sorted_ents = sorted(e.strip().lower() for e in entities)
+    rel = re.sub(r"\s+", " ", relationship.strip().lower())
     canonical = f"{qt} | {', '.join(sorted_ents)} | {rel}"
     query_hash = hashlib.sha256(canonical.encode()).hexdigest()[:16]
     return canonical, query_hash
@@ -791,29 +789,41 @@ _DICT_FORMAT_HINT = """
 """
 
 
+def _lowercase_queries(obj):
+    if isinstance(obj, dict):
+        return {k.lower(): _lowercase_queries(v) for k, v in obj.items()}
+    if isinstance(obj, list):
+        return [_lowercase_queries(i) for i in obj]
+    if isinstance(obj, str):
+        return obj.lower()
+    return obj
+
+
 def _dict_to_pipe_strings(queries_dict: dict) -> list[str]:
+    queries_dict = _lowercase_queries(queries_dict)
     pipe_strings: list[str] = []
 
     for label, q in queries_dict.items():
         if not isinstance(q, dict):
             raise ParseError(f"Query '{label}' must be a dict. \n{_DICT_FORMAT_HINT}")
 
-        qtype = str(q.get("Type", "")).strip()
+        qtype = str(q.get("type", "")).strip()
         if not qtype:
-            raise ParseError(f"Query '{label}' is missing 'Type'. \n{_DICT_FORMAT_HINT}")
+            # infer from presence of "question word" rather than hard-failing
+            qtype = "question" if q.get("question word", "") else "statement"
 
-        entities: list = q.get("Entities", [])
+        entities: list = q.get("entities", [])
         if not entities:
             raise ParseError(f"Query '{label}' is missing 'Entities'. \n{_DICT_FORMAT_HINT}")
-        entities_str = ", ".join(str(e) for e in entities)
+        entities_str = ", ".join(entities)
 
-        relationships: list = q.get("Relationship", [])
+        relationships: list = q.get("relationship", [])
         if not relationships:
             raise ParseError(f"Query '{label}' is missing 'Relationship'. \n{_DICT_FORMAT_HINT}")
 
         for rel in relationships:
-            if qtype.lower() == "question":
-                qword = str(q.get("Question Word", "")).strip()
+            if qtype == "question":
+                qword = str(q.get("question word", "")).strip()
                 if not qword:
                     raise ParseError(
                         f"Query '{label}' is type Question but missing 'Question Word'. \n{_DICT_FORMAT_HINT}"
